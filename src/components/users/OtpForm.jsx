@@ -11,7 +11,7 @@ function OtpForm() {
         e.preventDefault()
         try {
             if (otp) {
-                const res = await axios.post('http://127.0.0.1:8000/api/v1/auth/verify-email/', { 'otp': otp })
+                const res = await axios.post('http://13.53.133.66:8000/api/v1/auth/verify-email/', { 'otp': otp })
                 const resp = res.data
                 if (res.status === 200) {
                     navigate('/login')

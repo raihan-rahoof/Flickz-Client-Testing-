@@ -62,7 +62,7 @@ function RegisterForm() {
       toast.error("Provide a valid Phone Number")
     } else {
       setLoading(true)
-      axios.post('http://127.0.0.1:8000/api/v1/auth/register/', form)
+      axios.post('http://13.53.133.66:8000/api/v1/auth/register/', form)
         .then((res) => {
           const response = res.data;
           

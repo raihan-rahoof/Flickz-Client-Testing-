@@ -19,7 +19,7 @@ const createAxiosInstance = (role) =>{
          refresh_token = localStorage.getItem('theatre_refresh') ? JSON.parse(localStorage.getItem('theatre_refresh')):""
     }
 
-    const baseUrl = "http://localhost:8000/api/v1"
+    const baseUrl = "http://13.53.133.66:8000/api/v1"
     const axiosInstance = axios.create({
         baseURL:baseUrl,
         'Content-type':'application/json',
