@@ -144,7 +144,7 @@ function Navbar() {
                                             <Link to='/tickets'>Tickets</Link>
                                         </DropdownItem>
                                         <DropdownItem key="help_and_feedback">
-                                            Rewards
+                                            <Link to='/theatre'>Theatre</Link>
                                         </DropdownItem>
                                         <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                                             Log Out
