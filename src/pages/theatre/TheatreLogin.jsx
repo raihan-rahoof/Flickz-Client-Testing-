@@ -20,75 +20,84 @@ function TheatreLogin() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    if (formData.email.trim() === '' || formData.password.trim() === '') {
-      alert('Email and password cannot be empty.');
-      return;
-    }
-    if (!formData.email.includes('@')) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await axios.post('https://flickz.onrender.com/api/v1/theatre/theatre-login/', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const response = res.data;
-      console.log('Response data:', response);
-
-      if (!response || typeof response !== 'object') {
-        throw new Error('Invalid response from server');
+      if (formData.email.trim() === '' || formData.password.trim() === '') {
+        alert('Email and password cannot be empty.');
+        return;
       }
-
-      const theatre = {
-        theatre_name: response.theatre_name,
-        theatre_email: response.email,
-        theatre_id: response.id,
-      };
-
-      if (res.status === 200) {
-        setLoading(false);
-        localStorage.setItem('theatre', JSON.stringify(theatre));
-        localStorage.setItem('theatre_access', response.access_token);
-        localStorage.setItem('theatre_refresh', response.refresh_token);
-        setIsTheatreLoggedIn(true);
-        navigate('/theatre/shows');
-        toast.success('Theatre login successful');
-      } else {
-        setLoading(false);
-        toast.error('Facing some problem. Please try again');
+      if (!formData.email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
       }
-    } catch (error) {
-      setLoading(false);
-      console.error('Error:', error);
-      if (error.response) {
-        const errorMessage = error.response.data.detail;
-        const check_message =
-          'Your account is currently pending review by our administration team. We will update you on Mail with the status of your account approval within one business day. Thank you for your patience.';
-        if (errorMessage === check_message) {
-          Swal.fire({
-            text: errorMessage,
-            imageUrl:
-              'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW9vd2lhcXVndTVkZHphdTh5NmxjZmR1cXlleHphZmNkZHVzd2J3NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/HqqUPmqVuo4UgIZ88g/giphy.gif',
-            imageWidth: 400,
-            imageHeight: 300,
-            imageAlt: 'Custom image',
-          });
-        } else {
-          toast.error(errorMessage);
+      setLoading(true);
+      try {
+        const res = await axios.post('https://flickz.onrender.com/api/v1/theatre/theatre-login/', formData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        // Log the entire response object
+        console.log('Full Response:', res);
+
+        // Extract the response data
+        const response = res.data;
+        console.log('Response data:', response);
+
+        // Validate the response structure
+        if (!response || typeof response !== 'object' || !response.email || !response.access_token || !response.refresh_token) {
+          throw new Error('Invalid response from server');
         }
-      } else if (error.request) {
-        toast.error('No response from server. Please try again later.');
-      } else {
-        toast.error('An unexpected error occurred. Please try again.');
+
+        const theatre = {
+          theatre_name: response.theatre_name,
+          theatre_email: response.email,
+          theatre_id: response.id,
+        };
+
+        if (res.status === 200) {
+          setLoading(false);
+          localStorage.setItem('theatre', JSON.stringify(theatre));
+          localStorage.setItem('theatre_access', response.access_token);
+          localStorage.setItem('theatre_refresh', response.refresh_token);
+          setIsTheatreLoggedIn(true);
+          navigate('/theatre/shows');
+          toast.success('Theatre login successful');
+        } else {
+          setLoading(false);
+          toast.error('Facing some problem. Please try again');
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error('Error:', error);
+
+        if (error.response) {
+          const errorMessage = error.response.data.detail;
+          const check_message =
+            'Your account is currently pending review by our administration team. We will update you on Mail with the status of your account approval within one business day. Thank you for your patience.';
+          if (errorMessage === check_message) {
+            Swal.fire({
+              text: errorMessage,
+              imageUrl:
+                'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW9vd2lhcXVndTVkZHphdTh5NmxjZmR1cXlleHphZmNkZHVzd2J3NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/HqqUPmqVuo4UgIZ88g/giphy.gif',
+              imageWidth: 400,
+              imageHeight: 300,
+              imageAlt: 'Custom image',
+            });
+          } else {
+            toast.error(errorMessage);
+          }
+        } else if (error.request) {
+          toast.error('No response from server. Please try again later.');
+        } else {
+          toast.error('An unexpected error occurred. Please try again.');
+        }
       }
-    }
-  };
+};
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gray-900">
