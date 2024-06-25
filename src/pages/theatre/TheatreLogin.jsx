@@ -33,7 +33,7 @@ function TheatreLogin() {
             }
             
             try{
-              const res = await axios.post('http://127.0.0.1:8000/api/v1/theatre/theatre-login/',formData)
+              const res = await axios.post('https://flickz.onrender.com/api/v1/theatre/theatre-login/',formData)
               const response = res.data
 
               const theatre = {

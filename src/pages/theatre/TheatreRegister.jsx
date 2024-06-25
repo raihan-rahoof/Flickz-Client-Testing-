@@ -71,7 +71,7 @@ console.log(formData);
   
   try {
     setLoading(true)
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/theatre/register/', data,{
+    const response = await axios.post('https://flickz.onrender.com/api/v1/theatre/register/', data,{
       headers:{
         "Content-Type":'multipart/form-data',
       }
