@@ -206,7 +206,7 @@ console.log(formData);
     
 
     <div>
-      {isLoading ? <button type="submit" class="mt-5 w-full rounded-md bg-indigo-500 p-2 text-center font-semibold text-white">
+      {isLoading ? <button disabled type="submit" class="mt-5 w-full rounded-md bg-indigo-500 p-2 text-center font-semibold text-white">
         <div class="animate-spin inline-block size-7 border-[3px] border-current border-t-transparent text-white rounded-full " role="status" aria-label="loading">
           <span class="sr-only">Loading...</span>
         </div>
