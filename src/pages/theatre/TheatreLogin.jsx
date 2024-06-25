@@ -47,7 +47,7 @@ function TheatreLogin() {
                 localStorage.setItem("theatre_access", JSON.stringify(response.access_token));
                 localStorage.setItem("theatre_refresh", JSON.stringify(response.refresh_token));
                 setIsTheatreLoggedIn(true)
-                navigate('/theatre/dashboard');
+                navigate('/theatre/shows');
                 toast.success('Theatre login successful');
               }else{
                 toast.success('Facing some problem.Please try again')

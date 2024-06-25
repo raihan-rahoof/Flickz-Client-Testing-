@@ -28,7 +28,7 @@ function TheatreOtpForm() {
     try {
       if(otp){
         setLoading(true)
-        const res = await axios.post('http://127.0.0.1:8000/api/v1/theatre/verify-email/',{"otp":otp})
+        const res = await axios.post('https://flickz-backend.onrender.com/api/v1/theatre/verify-email/',{"otp":otp})
         const response = res.data
 
         if(res.status === 200){
