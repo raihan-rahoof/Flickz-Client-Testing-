@@ -37,17 +37,21 @@ function TheatreLogin() {
       const response = res.data;
       console.log('Response data:', response);
 
+      if (!response || typeof response !== 'object') {
+        throw new Error('Invalid response from server');
+      }
+
       const theatre = {
-        'theatre_name': response.theatre_name,
-        'theatre_email': response.email,
-        'theatre_id': response.id,
+        theatre_name: response.theatre_name,
+        theatre_email: response.email,
+        theatre_id: response.id,
       };
 
       if (res.status === 200) {
         setLoading(false);
-        localStorage.setItem("theatre", JSON.stringify(theatre));
-        localStorage.setItem("theatre_access", response.access_token); // No need to stringify tokens
-        localStorage.setItem("theatre_refresh", response.refresh_token);
+        localStorage.setItem('theatre', JSON.stringify(theatre));
+        localStorage.setItem('theatre_access', response.access_token);
+        localStorage.setItem('theatre_refresh', response.refresh_token);
         setIsTheatreLoggedIn(true);
         navigate('/theatre/shows');
         toast.success('Theatre login successful');
@@ -57,16 +61,19 @@ function TheatreLogin() {
       }
     } catch (error) {
       setLoading(false);
+      console.error('Error:', error);
       if (error.response) {
         const errorMessage = error.response.data.detail;
-        const check_message = "Your account is currently pending review by our administration team. We will update you on Mail with the status of your account approval within one business day. Thank you for your patience.";
+        const check_message =
+          'Your account is currently pending review by our administration team. We will update you on Mail with the status of your account approval within one business day. Thank you for your patience.';
         if (errorMessage === check_message) {
           Swal.fire({
             text: errorMessage,
-            imageUrl: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW9vd2lhcXVndTVkZHphdTh5NmxjZmR1cXlleHphZmNkZHVzd2J3NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/HqqUPmqVuo4UgIZ88g/giphy.gif",
+            imageUrl:
+              'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW9vd2lhcXVndTVkZHphdTh5NmxjZmR1cXlleHphZmNkZHVzd2J3NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/HqqUPmqVuo4UgIZ88g/giphy.gif',
             imageWidth: 400,
             imageHeight: 300,
-            imageAlt: "Custom image"
+            imageAlt: 'Custom image',
           });
         } else {
           toast.error(errorMessage);
@@ -74,7 +81,7 @@ function TheatreLogin() {
       } else if (error.request) {
         toast.error('No response from server. Please try again later.');
       } else {
-        console.error('Error', error.message);
+        toast.error('An unexpected error occurred. Please try again.');
       }
     }
   };
@@ -86,7 +93,9 @@ function TheatreLogin() {
         <div className="w-full sm:w-3/5">
           <div className="p-8">
             <h1 className="text-3xl font-black text-white">Login</h1>
-            <p className="mt-2 mb-5 text-base leading-tight text-gray-300">Login to start your selling your tickets with flickz and lets grow together.</p>
+            <p className="mt-2 mb-5 text-base leading-tight text-gray-300">
+              Login to start your selling your tickets with flickz and lets grow together.
+            </p>
             <form className="mt-8" onSubmit={handleSubmit}>
               <div className="relative mt-2 w-full">
                 <input
