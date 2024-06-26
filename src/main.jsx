@@ -39,7 +39,7 @@ import { TheatreAuthProvider } from './Context/TheatreAuthContext';
 import TheatrePrivateRoute from './utlis/TheatrePrivateRoute';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <AuthProvider>
       <AdminAuthProvider>
         <TheatreAuthProvider>
@@ -82,5 +82,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </TheatreAuthProvider>
       </AdminAuthProvider>
     </AuthProvider>
-  </React.StrictMode>
+  
 );
