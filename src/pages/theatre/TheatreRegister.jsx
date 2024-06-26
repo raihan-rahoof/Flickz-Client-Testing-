@@ -73,9 +73,11 @@ console.log(formData);
     setLoading(true)
     const response = await axios.post('https://flickz.onrender.com/api/v1/theatre/register/', data,{
       headers:{
-        "Content-Type":'multipart/form-data',
+        "Content-Type":'application/json',
       }
     });
+
+    console.log("full",response);
 
     if (response.status == 201){
       setLoading(false)
