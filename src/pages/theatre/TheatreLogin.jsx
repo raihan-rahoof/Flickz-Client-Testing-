@@ -35,12 +35,7 @@ function TheatreLogin() {
       }
       setLoading(true);
       try {
-        const res = await axios.post('https://flickz.onrender.com/api/v1/theatre/theatre-login/', formData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        
+        const res = await axios.post('https://flickz.onrender.com/api/v1/theatre/theatre-login/', formData);
         // Log the entire response object
         console.log('Full Response:', res);
 
