@@ -98,6 +98,8 @@ function LoginForm() {
       try {
         const res = await axios.post('https://flickz-backend.onrender.com/api/v1/auth/login/', loginData);
         const response = res.data;
+
+        console.log(res)
         
         const user = {
         'email': response.email,
