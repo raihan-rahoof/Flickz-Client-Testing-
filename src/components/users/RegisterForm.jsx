@@ -62,7 +62,7 @@ function RegisterForm() {
       toast.error("Provide a valid Phone Number")
     } else {
       setLoading(true)
-      axios.post('https://flickz-backend.onrender.com/api/v1/auth/register/', form)
+      axios.post('https://13.53.133.66/api/v1/auth/register/', form)
         .then((res) => {
           const response = res.data;
           
