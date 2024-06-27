@@ -68,7 +68,7 @@ function AddMovieForm() {
         try {
             const token = JSON.parse(localStorage.getItem('admin_access'));
             console.log(token);
-            const res = await axios.post('https://flickz-backend.onrender.com/api/v1/cadmin/admin/add-movies/', formDataToSend, {
+            const res = await axios.post('https://13.53.133.66/api/v1/cadmin/admin/add-movies/', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}` 
