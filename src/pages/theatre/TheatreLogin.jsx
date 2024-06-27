@@ -36,14 +36,14 @@ function TheatreLogin() {
       setLoading(true);
       try {
         const res = await axios.post('https://13.53.133.66/api/v1/theatre/theatre-login/', formData);
-        // Log the entire response object
+        
         console.log('Full Response:', res);
 
-        // Extract the response data
+        
         const response = res.data;
         console.log('Response data:', response);
 
-        // Validate the response structure
+       
         if (!response || typeof response !== 'object' || !response.email || !response.access_token || !response.refresh_token) {
           throw new Error('Invalid response from server');
         }
@@ -57,8 +57,8 @@ function TheatreLogin() {
         if (res.status === 200) {
           setLoading(false);
           localStorage.setItem('theatre', JSON.stringify(theatre));
-          localStorage.setItem('theatre_access', response.access_token);
-          localStorage.setItem('theatre_refresh', response.refresh_token);
+          localStorage.setItem("theatre_access", JSON.stringify(response.access_token));
+          localStorage.setItem("theatre_refresh", JSON.stringify(response.refresh_token));
           setIsTheatreLoggedIn(true);
           navigate('/theatre/shows');
           toast.success('Theatre login successful');
