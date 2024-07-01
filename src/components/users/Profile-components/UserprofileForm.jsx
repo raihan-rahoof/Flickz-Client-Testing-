@@ -43,7 +43,7 @@ function UserprofileForm({ userProfile, setProfile }) {
     onOpenChange: onOtpOpenChange,
   } = useDisclosure();
   const [isVerified, setIsVerified] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [user, setUser] = useState(null);
 
@@ -91,7 +91,7 @@ function UserprofileForm({ userProfile, setProfile }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault;
+    e.preventDefault();
     const formData = new FormData();
     formData.append("user[first_name]", details.user.first_name);
     formData.append("user[last_name]", details.user.last_name);
@@ -119,33 +119,37 @@ function UserprofileForm({ userProfile, setProfile }) {
     }
   };
 
-  function onCaptchaVerify() {
-    if(!window.RecaptchaVerifier){
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response) => {
-         verifyOtp()
+  const onCaptchaVerify = () => {
+    if (!window.RecaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            verifyOtp();
+          },
+          "expired-callback": () => {},
         },
-        'expired-callback': () => {},
-      },
-      auth);
+        auth
+      );
     }
-     
+  };
 
   const verifyOtp = async (phone) => {
-   setLoading(true)
-   onCaptchaVerify()
-   const phoneNumber = "+91"+phone
-
-   const appVerifier = window.recaptchaVerifier
-   signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-    .then((confirmationResult) => {
-      window.confirmationResult = confirmationResult;
-      setLoading(false)
-    }).catch((error) => {
-     console.log(error);
-     setLoading(false)
-    });
+    setLoading(true);
+    onCaptchaVerify();
+    const phoneNumber = "+91" + phone;
+    const appVerifier = window.recaptchaVerifier;
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
 
   return (
@@ -255,7 +259,6 @@ function UserprofileForm({ userProfile, setProfile }) {
                               size="sm"
                               color="danger"
                               onPress={onOtpOpen}
-                              onClick={sendOtp(details.user.phone)}
                             >
                               Verify
                             </Button>
@@ -325,14 +328,11 @@ function UserprofileForm({ userProfile, setProfile }) {
                       </label>
                     </div>
                     <div className="relative">
-                      <textarea
+                      <input
                         type="text"
-                        id="password"
                         disabled
                         value={userProfile.address || ""}
-                        className="py-3 font-bold px-4 block w-full bg-[#2A3240] rounded-lg text-sm "
-                        required
-                        aria-describedby="password-error"
+                        className="py-3 font-bold px-4 bg-[#2A3240] pe-9 block w-full border-gray-200 rounded-lg text-sm "
                       />
                     </div>
                   </div>
@@ -349,12 +349,9 @@ function UserprofileForm({ userProfile, setProfile }) {
                     <div className="relative">
                       <input
                         type="text"
-                        id="password"
                         disabled
                         value={userProfile.pincode || ""}
-                        className="py-3 font-bold px-4 block w-full bg-[#2A3240] rounded-lg text-sm "
-                        required
-                        aria-describedby="password-error"
+                        className="py-3 font-bold px-4 bg-[#2A3240] pe-9 block w-full border-gray-200 rounded-lg text-sm "
                       />
                     </div>
                   </div>
@@ -371,12 +368,9 @@ function UserprofileForm({ userProfile, setProfile }) {
                     <div className="relative">
                       <input
                         type="text"
-                        id="password"
                         disabled
                         value={userProfile.city || ""}
-                        className="py-3 font-bold px-4 block w-full bg-[#2A3240] rounded-lg text-sm "
-                        required
-                        aria-describedby="password-error"
+                        className="py-3 font-bold px-4 bg-[#2A3240] pe-9 block w-full border-gray-200 rounded-lg text-sm "
                       />
                     </div>
                   </div>
@@ -393,12 +387,9 @@ function UserprofileForm({ userProfile, setProfile }) {
                     <div className="relative">
                       <input
                         type="text"
-                        id="password"
                         disabled
                         value={userProfile.district || ""}
-                        className="py-3 font-bold px-4 block w-full bg-[#2A3240] rounded-lg text-sm "
-                        required
-                        aria-describedby="password-error"
+                        className="py-3 font-bold px-4 bg-[#2A3240] pe-9 block w-full border-gray-200 rounded-lg text-sm "
                       />
                     </div>
                   </div>
@@ -415,165 +406,155 @@ function UserprofileForm({ userProfile, setProfile }) {
                     <div className="relative">
                       <input
                         type="text"
-                        id="password"
                         disabled
                         value={userProfile.state || ""}
-                        className="py-3 font-bold px-4 block w-full bg-[#2A3240] rounded-lg text-sm "
-                        required
-                        aria-describedby="password-error"
+                        className="py-3 font-bold px-4 bg-[#2A3240] pe-9 block w-full border-gray-200 rounded-lg text-sm "
                       />
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-center items-center mt-6  ">
-                  <Button
-                    onPress={onOpen}
-                    className="bg-gradient-to-r from-[#427EF5] to-[#274A8F]"
-                    size="md"
-                    variant="solid"
-                  >
-                    {Object.values(details).some((value) => !value)
-                      ? "Complete Your Profile"
-                      : "Edit Profile"}
-                  </Button>
-                </div>
+
+                <Button color="primary" className="mt-8" onPress={onOpen}>
+                  Update Profile
+                </Button>
               </form>
             ) : (
-              <Spinner />
+              <div className="p-2">
+                <Spinner size="lg" />
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      <Modal
-        scrollBehavior="outside"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      >
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                {" "}
-                'Edit Profile'{" "}
+                Edit your Details
               </ModalHeader>
-              <ModalBody>
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.user.first_name}
-                  label="First Name"
-                  labelPlacement="outside"
-                  name="first_name"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.user.last_name || ""}
-                  label="Last Name"
-                  labelPlacement="outside"
-                  name="last_name"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.user.phone || ""}
-                  label="Phone"
-                  labelPlacement="outside"
-                  name="phone"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.birth_date || ""}
-                  label="Birth Date"
-                  labelPlacement="outside"
-                  type="date"
-                  name="birth_date"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.gender || ""}
-                  label="Gender"
-                  labelPlacement="outside"
-                  type="text"
-                  name="gender"
-                />
-                <Textarea
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.address || ""}
-                  label="Address"
-                  labelPlacement="outside"
-                  name="address"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  type="number"
-                  value={details.pincode || ""}
-                  label="Pincode"
-                  labelPlacement="outside"
-                  name="pincode"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.city || ""}
-                  label="City"
-                  labelPlacement="outside"
-                  name="city"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.district || ""}
-                  label="District"
-                  labelPlacement="outside"
-                  name="district"
-                />
-                <Input
-                  autoFocus
-                  onChange={handleInputChange}
-                  value={details.state || ""}
-                  label="State"
-                  labelPlacement="outside"
-                  name="state"
-                />
-                <div className="mt-2 flex justify-center align-middle">
-                  <Image
-                    isZoomed
-                    width={240}
-                    alt="User Image"
-                    src={
-                      file
-                        ? URL.createObjectURL(file)
-                        : details.user_image ||
-                          "https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg"
-                    }
+              <form onSubmit={handleSubmit}>
+                <ModalBody>
+                  <Input
+                    autoFocus
+                    label="First Name"
+                    labelPlacement="outside"
+                    placeholder="Enter your first name"
+                    name="first_name"
+                    value={details.user.first_name || ""}
+                    onChange={handleInputChange}
                   />
-                </div>
-                <input
-                  onChange={handleInputChange}
-                  className="block w-[15rem] ml-[5rem] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="file_input"
-                  type="file"
-                  name="user_image"
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  className="hover:bg-green-400"
-                  onPress={handleSubmit}
-                >
-                  Update
-                </Button>
-              </ModalFooter>
+
+                  <Input
+                    autoFocus
+                    label="Last Name"
+                    labelPlacement="outside"
+                    placeholder="Enter your last name"
+                    name="last_name"
+                    value={details.user.last_name || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="Phone"
+                    labelPlacement="outside"
+                    placeholder="Enter your phone number"
+                    name="phone"
+                    value={details.user.phone || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    type="date"
+                    label="Birth-Date"
+                    labelPlacement="outside"
+                    name="birth_date"
+                    value={details.birth_date || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="Gender"
+                    labelPlacement="outside"
+                    placeholder="Enter your gender"
+                    name="gender"
+                    value={details.gender || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="Address"
+                    labelPlacement="outside"
+                    placeholder="Enter your address"
+                    name="address"
+                    value={details.address || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="Pincode"
+                    labelPlacement="outside"
+                    placeholder="Enter your pincode"
+                    name="pincode"
+                    value={details.pincode || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="City"
+                    labelPlacement="outside"
+                    placeholder="Enter your city"
+                    name="city"
+                    value={details.city || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="District"
+                    labelPlacement="outside"
+                    placeholder="Enter your district"
+                    name="district"
+                    value={details.district || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    label="State"
+                    labelPlacement="outside"
+                    placeholder="Enter your state"
+                    name="state"
+                    value={details.state || ""}
+                    onChange={handleInputChange}
+                  />
+
+                  <Input
+                    autoFocus
+                    type="file"
+                    label="Image"
+                    labelPlacement="outside"
+                    placeholder="Upload an image"
+                    name="user_image"
+                    onChange={handleInputChange}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button type="button" color="danger" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button type="submit" color="primary">
+                    Save
+                  </Button>
+                </ModalFooter>
+              </form>
             </>
           )}
         </ModalContent>
@@ -581,30 +562,58 @@ function UserprofileForm({ userProfile, setProfile }) {
 
       <Modal isOpen={isOtpOpen} onOpenChange={onOtpOpenChange}>
         <ModalContent>
-          <ModalHeader className="flex flex-col justify-center items-center">
-            <h1>OTP</h1>
-            <p className="text-sm font-normal">
-              enter the code that sented to your phone{" "}
-            </p>
-          </ModalHeader>
-          <ModalBody>
-            <Input
-              autoFocus
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              onInput={(e) =>
-                (e.target.value = e.target.value.replace(/[^0-9]/g, ""))
-              }
-              label="Enter OTP"
-              maxLength={6}
-              inputMode="numeric"
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onPress={onclose} onClick={verifyOtp}>
-              Verify OTP
-            </Button>
-          </ModalFooter>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Verify your Phone Number
+              </ModalHeader>
+              <ModalBody>
+                <Input
+                  autoFocus
+                  type="tel"
+                  label="Phone Number"
+                  labelPlacement="outside"
+                  placeholder="Enter phone number"
+                  value={details.user.phone || ""}
+                  onChange={(e) =>
+                    setDetails((prevDetails) => ({
+                      ...prevDetails,
+                      user: {
+                        ...prevDetails.user,
+                        phone: e.target.value,
+                      },
+                    }))
+                  }
+                />
+
+                <Input
+                  autoFocus
+                  type="tel"
+                  label="Enter OTP"
+                  labelPlacement="outside"
+                  placeholder="Enter the OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  type="button"
+                  className="mt-6"
+                  onPress={async () => {
+                    setLoading(true);
+                    const phone = details.user.phone;
+                    await verifyOtp(phone);
+                    setLoading(false);
+                  }}
+                  isLoading={loading}
+                >
+                  Verify
+                </Button>
+              </ModalFooter>
+            </>
+          )}
         </ModalContent>
       </Modal>
     </>
