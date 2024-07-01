@@ -35,7 +35,10 @@ function TheatreLogin() {
       }
       setLoading(true);
       try {
-        const res = await axios.post('https://13.53.133.66/api/v1/theatre/theatre-login/', formData);
+        const res = await axios.post(
+          "https://flickz-backend.duckdns.org/api/v1/theatre/theatre-login/",
+          formData
+        );
         
         console.log('Full Response:', res);
 

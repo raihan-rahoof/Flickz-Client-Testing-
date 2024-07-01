@@ -20,7 +20,9 @@ function SeatLayout({ show }) {
   const axiosInstance = createAxiosInstance('user');
 
   useEffect(() => {
-    const websocket = new WebSocket('wss://13.53.133.66/ws/seats/');
+    const websocket = new WebSocket(
+      "wss://flickz-backend.duckdns.org/ws/seats/"
+    );
 
     websocket.onopen = () => {
       console.log('WebSocket connection opened');

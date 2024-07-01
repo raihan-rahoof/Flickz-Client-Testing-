@@ -19,7 +19,7 @@ const createAxiosInstance = (role) =>{
          refresh_token = localStorage.getItem('theatre_refresh') ? JSON.parse(localStorage.getItem('theatre_refresh')):""
     }
 
-    const baseUrl = "https://13.53.133.66/api/v1"
+    const baseUrl = "https://flickz-backend.duckdns.org/api/v1";
     const axiosInstance = axios.create({
         baseURL:baseUrl,
         'Content-type':'application/json',

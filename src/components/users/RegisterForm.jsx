@@ -62,14 +62,15 @@ function RegisterForm() {
       toast.error("Provide a valid Phone Number")
     } else {
       setLoading(true)
-      axios.post('https://13.53.133.66/api/v1/auth/register/', form)
+      axios
+        .post("https://flickz-backend.duckdns.org/api/v1/auth/register/", form)
         .then((res) => {
           const response = res.data;
-          
+
           console.log(response);
           if (res.status === 201) {
-            setLoading(false)
-            navigate('/register/otp');
+            setLoading(false);
+            navigate("/register/otp");
             toast.success(response.message);
           }
         })
@@ -77,7 +78,7 @@ function RegisterForm() {
           if (error.response) {
             if (error.response.status === 400) {
               const errorData = error.response.data;
-              setLoading(false)
+              setLoading(false);
               for (const key in errorData) {
                 if (errorData.hasOwnProperty(key)) {
                   const errorMessage = errorData[key][0];
@@ -86,14 +87,14 @@ function RegisterForm() {
               }
             } else {
               toast.error("Server Error");
-              setLoading(false)
+              setLoading(false);
             }
           } else if (error.request) {
             toast.error("No response from server");
-            setLoading(false)
+            setLoading(false);
           } else {
-            console.error('Error', error.message);
-            setLoading(false)
+            console.error("Error", error.message);
+            setLoading(false);
           }
         });
     }

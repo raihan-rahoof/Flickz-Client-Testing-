@@ -11,7 +11,10 @@ function OtpForm() {
         e.preventDefault()
         try {
             if (otp) {
-                const res = await axios.post('https://13.53.133.66/api/v1/auth/verify-email/', { 'otp': otp })
+                const res = await axios.post(
+                  "https://flickz-backend.duckdns.org/api/v1/auth/verify-email/",
+                  { otp: otp }
+                );
                 const resp = res.data
                 if (res.status === 200) {
                     navigate('/login')

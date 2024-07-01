@@ -26,7 +26,10 @@ function LoginForm() {
     const payload=response.credential
 
     try {
-      const server_res= await axios.post("https://13.53.133.66/api/v1/auth/google/", {'access_token':payload})
+      const server_res = await axios.post(
+        "https://flickz-backend.duckdns.org/api/v1/auth/google/",
+        { access_token: payload }
+      );
       console.log(server_res.data)
       
       const user = {
@@ -96,7 +99,10 @@ function LoginForm() {
     } else {
       setLoading(true);
       try {
-        const res = await axios.post('https://13.53.133.66/api/v1/auth/login/', loginData);
+        const res = await axios.post(
+          "https://flickz-backend.duckdns.org//api/v1/auth/login/",
+          loginData
+        );
         const response = res.data;
 
         console.log(res)

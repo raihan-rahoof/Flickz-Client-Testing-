@@ -71,7 +71,10 @@ console.log(formData);
   
   try {
     setLoading(true)
-    const response = await axios.post('https://13.53.133.66/api/v1/theatre/register/', data)
+    const response = await axios.post(
+      "https://flickz-backend.duckdns.org/api/v1/theatre/register/",
+      data
+    );
 
     console.log("full",response);
 
