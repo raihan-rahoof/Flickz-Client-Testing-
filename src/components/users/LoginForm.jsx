@@ -100,7 +100,7 @@ function LoginForm() {
       setLoading(true);
       try {
         const res = await axios.post(
-          "https://flickz-backend.duckdns.org//api/v1/auth/login/",
+          "https://flickz-backend.duckdns.org/api/v1/auth/login/",
           loginData
         );
         const response = res.data;
