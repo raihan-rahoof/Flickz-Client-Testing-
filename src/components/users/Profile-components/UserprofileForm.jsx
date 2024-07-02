@@ -95,6 +95,13 @@ function UserprofileForm({ userProfile, setProfile }) {
     }
   };
 
+  const handleOtpChange = (e) => {
+    const value = e.target.value;
+    if (/^\d{0,6}$/.test(value)) {
+      setOtp(value);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -150,13 +157,13 @@ function UserprofileForm({ userProfile, setProfile }) {
         phoneNumber,
         window.recaptchaVerifier
       );
-      toast("Verification code sent to your phone");
+      toast.success("Verification code sent to your phone");
       setVerificationId(verificationId);
       setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);
-      toast("Error sending verification code.");
+      toast("Please wait senting OTP.");
     }
   };
 
@@ -165,9 +172,9 @@ function UserprofileForm({ userProfile, setProfile }) {
       const credential = PhoneAuthProvider.credential(verificationId, otp);
       await signInWithCredential(auth, credential);
       try {
-        const res = await axiosInstance.patch("/home/profile/verify-mobile");
+        const res = await axiosInstance.patch("/auth/user-profile/verify-mobile");
         if (res.status === 200) {
-          alert("Phone authentication successful!");
+          toast.success("Phone authentication successful!");
         }
       } catch (error) {
         console.log(error);
@@ -602,7 +609,7 @@ function UserprofileForm({ userProfile, setProfile }) {
                   labelPlacement="outside"
                   placeholder="Enter the OTP"
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  onChange={handleOtpChange}
                 />
               </ModalBody>
               <ModalFooter>
