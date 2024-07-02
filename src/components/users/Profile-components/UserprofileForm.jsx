@@ -172,7 +172,7 @@ function UserprofileForm({ userProfile, setProfile }) {
       const credential = PhoneAuthProvider.credential(verificationId, otp);
       await signInWithCredential(auth, credential);
       try {
-        const res = await axiosInstance.patch("/auth/user-profile/verify-mobile");
+        const res = await axiosInstance.patch("/auth/verify-mobile");
         if (res.status === 200) {
           toast.success("Phone authentication successful!");
         }
