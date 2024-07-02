@@ -15,7 +15,12 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import axios from "axios";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import {
+  PhoneAuthProvider,
+  RecaptchaVerifier,
+  signInWithCredential,
+  signInWithPhoneNumber,
+} from "firebase/auth";
 import { auth } from "../../../../firebase.config";
 
 function UserprofileForm({ userProfile, setProfile }) {
@@ -45,7 +50,7 @@ function UserprofileForm({ userProfile, setProfile }) {
   const [isVerified, setIsVerified] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
-  const [user, setUser] = useState(null);
+  const [verificationId, setVerificationId] = useState("");
 
   useEffect(() => {
     fetchUserProfile();
@@ -130,8 +135,7 @@ function UserprofileForm({ userProfile, setProfile }) {
             verifyOtp();
           },
           "expired-callback": () => {},
-        },
-        auth
+        }
       );
     }
   };
@@ -140,16 +144,38 @@ function UserprofileForm({ userProfile, setProfile }) {
     setLoading(true);
     onCaptchaVerify();
     const phoneNumber = "+91" + phone;
-    const appVerifier = window.recaptchaVerifier;
-    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setLoading(false);
-      })
-      .catch((error) => {
+    const phoneProvider = new PhoneAuthProvider(auth);
+    try {
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        phoneNumber,
+        window.recaptchaVerifier
+      );
+      toast("Verification code sent to your phone");
+      setVerificationId(verificationId);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      toast("Error sending verification code.");
+    }
+  };
+
+  const verifyCode = async () => {
+    try {
+      const credential = PhoneAuthProvider.credential(verificationId, otp);
+      await signInWithCredential(auth, credential);
+      try {
+        const res = await axiosInstance.patch("/home/profile/verify-mobile");
+        if (res.status === 200) {
+          alert("Phone authentication successful!");
+        }
+      } catch (error) {
         console.log(error);
-        setLoading(false);
-      });
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error during phone authentication");
+    }
   };
 
   return (
@@ -259,6 +285,7 @@ function UserprofileForm({ userProfile, setProfile }) {
                               size="sm"
                               color="danger"
                               onPress={onOtpOpen}
+                              onClick={() => verifyOtp(details.user.phone)}
                             >
                               Verify
                             </Button>
@@ -571,24 +598,6 @@ function UserprofileForm({ userProfile, setProfile }) {
                 <Input
                   autoFocus
                   type="tel"
-                  label="Phone Number"
-                  labelPlacement="outside"
-                  placeholder="Enter phone number"
-                  value={details.user.phone || ""}
-                  onChange={(e) =>
-                    setDetails((prevDetails) => ({
-                      ...prevDetails,
-                      user: {
-                        ...prevDetails.user,
-                        phone: e.target.value,
-                      },
-                    }))
-                  }
-                />
-
-                <Input
-                  autoFocus
-                  type="tel"
                   label="Enter OTP"
                   labelPlacement="outside"
                   placeholder="Enter the OTP"
@@ -601,16 +610,11 @@ function UserprofileForm({ userProfile, setProfile }) {
                   color="primary"
                   type="button"
                   className="mt-6"
-                  onPress={async () => {
-                    setLoading(true);
-                    const phone = details.user.phone;
-                    await verifyOtp(phone);
-                    setLoading(false);
-                  }}
-                  isLoading={loading}
+                  onClick={verifyCode}
                 >
                   Verify
                 </Button>
+                <div id="recaptcha-container"></div>
               </ModalFooter>
             </>
           )}
