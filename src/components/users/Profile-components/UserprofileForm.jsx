@@ -288,14 +288,21 @@ function UserprofileForm({ userProfile, setProfile }) {
                         name="phone"
                         endContent={
                           <div>
-                            <Button
-                              size="sm"
-                              color="danger"
-                              onPress={onOtpOpen}
-                              onClick={() => verifyOtp(details.user.phone)}
-                            >
-                              Verify
-                            </Button>
+                            {details.is_mobile_verified ? (
+                              <Button
+                                size="sm"
+                                color="danger"
+                                onPress={onOtpOpen}
+                                onClick={() => verifyOtp(details.user.phone)}
+                              >
+                                Verify
+                              </Button>
+                            ) : (
+                              <i
+                                class="fa-solid fa-circle-check"
+                                style="color: #29eb0f;"
+                              ></i>
+                            )}
                           </div>
                         }
                       />
