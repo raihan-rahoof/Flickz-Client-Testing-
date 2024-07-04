@@ -5,6 +5,7 @@ import createAxiosInstance from '../../utlis/axiosinstance';
 import MoiveInfo from '../../components/users/movie-details/MovieInfo';
 import axios from 'axios';
 import YouTube from 'react-youtube';
+import { Spinner } from '@nextui-org/react';
 
 function MoveDetails() {
   const apiKey = '1e8ca15750c58626a3d6735c10534c73';
@@ -75,7 +76,11 @@ function MoveDetails() {
     
     
   if (!movie) {
-    return <div>Loading...</div>;
+    return (
+      <div className='h-screen flex justify-center items-center'>
+        <Spinner label="Loading..." color="primary" />
+      </div>
+    );
   }
 
   const videoId = getYoutubeId(movie.trailer_link);
