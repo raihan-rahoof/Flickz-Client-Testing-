@@ -289,6 +289,11 @@ function UserprofileForm({ userProfile, setProfile }) {
                         endContent={
                           <div>
                             {details.is_mobile_verified ? (
+                              <i
+                                class="fa-solid fa-circle-check"
+                                style={{ color: "#29eb0f" }}
+                              ></i>
+                            ) : (
                               <Button
                                 size="sm"
                                 color="danger"
@@ -297,11 +302,6 @@ function UserprofileForm({ userProfile, setProfile }) {
                               >
                                 Verify
                               </Button>
-                            ) : (
-                              <i
-                                class="fa-solid fa-circle-check"
-                                style="color: #29eb0f;"
-                              ></i>
                             )}
                           </div>
                         }
