@@ -39,11 +39,11 @@ export default function TheatreNav(props) {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
+        {/* <NavbarItem>
           <RouterLink to='/theatre/dashboard' className={`hover:cursor-pointer ${props.now === 'dashboard' && 'text-indigo-500'}`}>
             Dashboard
           </RouterLink>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <RouterLink to='/theatre/shows' className={`hover:cursor-pointer ${props.now === 'Shows' && 'text-indigo-500'}`}>
             Shows
