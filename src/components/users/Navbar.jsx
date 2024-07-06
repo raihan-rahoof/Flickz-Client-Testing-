@@ -77,7 +77,7 @@ function Navbar() {
     };
 
     const handleSuggestionClick = (movieId) => {
-        navigate(`/movies/${movieId}`);
+        navigate(`/movie/${movieId}`);
     };
 
     return (
