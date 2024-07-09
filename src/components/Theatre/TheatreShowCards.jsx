@@ -22,6 +22,7 @@ import parseMovieDuration from '../../utlis/movieDuration';
 import formatTime12Hour from '../../utlis/formatTime12';
 import formatDateString from '../../utlis/Dateformat';
 import formatTime12HourInput from '../../utlis/formatTIme12Input';
+import { useNavigate } from 'react-router-dom';
 
 const customStyles = {
   control: (provided) => ({
@@ -76,6 +77,7 @@ function TheatreShowCards() {
     end_time: { hour: 0, minute: 0, second: 0, millisecond: 0 },
   });
   const axiosInstance = createAxiosInstance('theatre');
+  const navigate = useNavigate()
   
   const handleInputChange = (field, value) => {
     setFormData((prevFormData) => ({
@@ -151,7 +153,7 @@ function TheatreShowCards() {
 
   const handleDelete = async () => {
     try {
-      const response = await axiosInstance.delete(`theatre/shows/${selectedShow.id}/`);
+      const response = await axiosInstance.delete(`/theatre/shows/${selectedShow.id}/`);
       if (response.status === 204) {
         toast.success('Show deleted successfully');
         fetchShows();
@@ -235,24 +237,44 @@ function TheatreShowCards() {
                   <CardFooter className="text-small flex flex-col justify-center items-start">
                     <h2 className="text-lg font-bold">{show.show_name}</h2>
                     <h3 className="font-bold font-md">{show.movie.title}</h3>
-                    <p className="text-default-500">Language : {show.movie.language}</p>
-                    <p className="text-default-500">Date : {formatDateString(show.date)}</p>
                     <p className="text-default-500">
-                      {formatTime12Hour(show.start_time)} - {formatTime12Hour(show.end_time)}
+                      Language : {show.movie.language}
                     </p>
-                    <Button
-                      size="sm"
-                      radius="full"
-                      color="danger"
-                      variant="shadow"
-                      className="mt-2"
-                      onPress={() => {
-                        setSelectedShow(show);
-                        setDeleteModal(true);
+                    <p className="text-default-500">
+                      Date : {formatDateString(show.date)}
+                    </p>
+                    <p className="text-default-500">
+                      {formatTime12Hour(show.start_time)} -{" "}
+                      {formatTime12Hour(show.end_time)}
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        radius="full"
+                        color="danger"
+                        variant="shadow"
+                        className="mt-2"
+                        onPress={() => {
+                          setSelectedShow(show);
+                          setDeleteModal(true);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash"></i>
+                      </Button>
+                      <Button
+                        size="sm"
+                        radius="full"
+                        color="primary"
+                        variant="shadow"
+                        className="mt-2"
+                        onClick={()=>{ navigate('/theatre/show/manage',{state:show.id});
+                        
+                      
                       }}
-                    >
-                      <i className="fa-solid fa-trash"></i>
-                    </Button>
+                      >
+                        <i className="fa-solid fa-eye"></i>
+                      </Button>
+                    </div>
                   </CardFooter>
                 </Card>
               ))}
@@ -261,11 +283,18 @@ function TheatreShowCards() {
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" backdrop="blur">
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="top-center"
+        backdrop="blur"
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Add Show</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Add Show
+              </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
@@ -274,7 +303,9 @@ function TheatreShowCards() {
                   placeholder="Enter show name"
                   variant="bordered"
                   value={formData.show_name}
-                  onChange={(e) => handleInputChange('show_name', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("show_name", e.target.value)
+                  }
                   required
                 />
 
@@ -297,13 +328,16 @@ function TheatreShowCards() {
                 />
 
                 <div className="mb-4">
-                  <label htmlFor="release_date" className="block text-white text-sm">
+                  <label
+                    htmlFor="release_date"
+                    className="block text-white text-sm"
+                  >
                     Show Date
                   </label>
                   <input
                     type="date"
                     id="release_date"
-                    onChange={(e) => handleInputChange('date', e.target.value)}
+                    onChange={(e) => handleInputChange("date", e.target.value)}
                     name="date"
                     className="w-full text-white text-sm rounded-md px-3 py-2"
                   />
@@ -312,11 +346,14 @@ function TheatreShowCards() {
                 <TimeInput
                   label="Start Time"
                   labelPlacement="outside"
-                  onChange={(value) => handleInputChange('start_time', value)}
+                  onChange={(value) => handleInputChange("start_time", value)}
                 />
 
                 <label className="block text-white text-sm">End Time</label>
-                <Input value={formatTime12HourInput(formData.end_time) || ''} disabled />
+                <Input
+                  value={formatTime12HourInput(formData.end_time) || ""}
+                  disabled
+                />
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
@@ -331,13 +368,23 @@ function TheatreShowCards() {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={deleteModal} onOpenChange={setDeleteModal} placement="top-center" backdrop="blur">
+      <Modal
+        isOpen={deleteModal}
+        onOpenChange={setDeleteModal}
+        placement="top-center"
+        backdrop="blur"
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Confirm Delete</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Confirm Delete
+              </ModalHeader>
               <ModalBody>
-                <p>Are you sure you want to delete the show "{selectedShow?.show_name}"?</p>
+                <p>
+                  Are you sure you want to delete the show "
+                  {selectedShow?.show_name}"?
+                </p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>

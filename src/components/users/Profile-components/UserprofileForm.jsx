@@ -290,7 +290,7 @@ function UserprofileForm({ userProfile, setProfile }) {
                           <div>
                             {details.is_mobile_verified ? (
                               <i
-                                class="fa-solid fa-circle-check"
+                                className="fa-solid fa-circle-check"
                                 style={{ color: "#29eb0f" }}
                               ></i>
                             ) : (

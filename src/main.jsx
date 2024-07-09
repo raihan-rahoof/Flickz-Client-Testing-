@@ -37,6 +37,7 @@ import TicketDetailPage from './pages/users/Profile/TicketDetailView';
 import AdminPrivateRoute from './utlis/AdminPrivateRoute';
 import { TheatreAuthProvider } from './Context/TheatreAuthContext';
 import TheatrePrivateRoute from './utlis/TheatrePrivateRoute';
+import TheatreShowMgmt from './pages/theatre/theatreManagment/TheatreShowMgmt';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   
@@ -67,6 +68,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/admin/movies" element={<AdminPrivateRoute element={Movie} />} />
               <Route path="/admin/add-movie" element={<AdminPrivateRoute element={AddMovie} />} />
               <Route path="/admin/theatres" element={<AdminPrivateRoute element={TheatreList} />} />
+              
 
               <Route path="/theatre" element={<Theatre />} />
               <Route path="/theatre/register" element={<TheatreRegister />} />
@@ -76,6 +78,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/theatre/shows" element={<TheatrePrivateRoute element={TheatreShows}/>} />
               <Route path="/theatre/screens" element={<TheatrePrivateRoute element={TheatreScreens}/>} />
               <Route path="/theatre/screens/edit-layout/:screenId" element={<TheatrePrivateRoute element={TheatreSeatLayoutEdit}/>} />
+              <Route path="/theatre/show/manage" element={<TheatrePrivateRoute element={TheatreShowMgmt}/>}/>
             </Routes>
           </Router>
         </NextUIProvider>
