@@ -151,7 +151,7 @@ function ShowMgmtCompt() {
                       className="fa-solid fa-dollar"
                       style={{ color: "green" }}
                     ></i>{" "}
-                    {showDetails.total_revenue}
+                    {showDetails.total_revenue_online}
                   </p>
                 </div>
                 <div className="mt-4">
