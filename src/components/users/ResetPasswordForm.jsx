@@ -13,6 +13,8 @@ function ResetPassword() {
             const res = await axiosInstance.post("/auth/password-reset/",{'email':email})
             if (res.status == 200){
                 toast.success("a link to reset your password has been sent to your email")
+            }else{
+                toast.error('Cant find accound with this Email')
             }
             setEmail('')
         }
