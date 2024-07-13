@@ -39,6 +39,7 @@ import { TheatreAuthProvider } from './Context/TheatreAuthContext';
 import TheatrePrivateRoute from './utlis/TheatrePrivateRoute';
 import TheatreShowMgmt from './pages/theatre/theatreManagment/TheatreShowMgmt';
 import TheatreSideSeatBooking from './pages/theatre/theatreManagment/TheatreSideSeatBooking';
+import AdminDashBoard from './pages/admin/AdminDashBoard';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
@@ -82,6 +83,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route path="/payment-failed" element={<PaymentFailed />} />
 
               <Route path="/admin" element={<AdminLogin />} />
+              <Route path='/admin/dashboard' element={<AdminDashBoard/>}/>
               <Route
                 path="/admin/user-list"
                 element={<AdminPrivateRoute element={UserPage} />}
