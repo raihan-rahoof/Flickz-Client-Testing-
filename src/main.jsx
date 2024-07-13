@@ -38,12 +38,12 @@ import AdminPrivateRoute from './utlis/AdminPrivateRoute';
 import { TheatreAuthProvider } from './Context/TheatreAuthContext';
 import TheatrePrivateRoute from './utlis/TheatrePrivateRoute';
 import TheatreShowMgmt from './pages/theatre/theatreManagment/TheatreShowMgmt';
+import TheatreSideSeatBooking from './pages/theatre/theatreManagment/TheatreSideSeatBooking';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  
-    <AuthProvider>
-      <AdminAuthProvider>
-        <TheatreAuthProvider>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <AuthProvider>
+    <AdminAuthProvider>
+      <TheatreAuthProvider>
         <NextUIProvider>
           <Toaster />
           <Router>
@@ -53,37 +53,86 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/register" element={<Register />} />
               <Route path="/register/otp" element={<Otp />} />
               <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/reset-password-confirm/:uid/:token" element={<ChangePassword />} />
+              <Route
+                path="/reset-password-confirm/:uid/:token"
+                element={<ChangePassword />}
+              />
               <Route path="/movie/:id" element={<MoveDetails />} />
-              <Route path="/user-profile" element={<PrivateRoute element={UserProfile} />} />
-              <Route path="/tickets" element={<PrivateRoute element={TicketDetails} />} />
-              <Route path="/tickets/details/:id" element={<PrivateRoute element={TicketDetailPage} />} />
-              <Route path="/movie/available-shows/:id" element={<PrivateRoute element={AvailabeTheatres} />} />
-              <Route path="/movie/select-seat" element={<PrivateRoute element={SelectSeat} />} />
-              <Route path="/payment-success" element={<PaymentSuccess/>} />
-              <Route path="/payment-failed" element={<PaymentFailed/>} />
+              <Route
+                path="/user-profile"
+                element={<PrivateRoute element={UserProfile} />}
+              />
+              <Route
+                path="/tickets"
+                element={<PrivateRoute element={TicketDetails} />}
+              />
+              <Route
+                path="/tickets/details/:id"
+                element={<PrivateRoute element={TicketDetailPage} />}
+              />
+              <Route
+                path="/movie/available-shows/:id"
+                element={<PrivateRoute element={AvailabeTheatres} />}
+              />
+              <Route
+                path="/movie/select-seat"
+                element={<PrivateRoute element={SelectSeat} />}
+              />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/payment-failed" element={<PaymentFailed />} />
 
               <Route path="/admin" element={<AdminLogin />} />
-              <Route path="/admin/user-list" element={<AdminPrivateRoute element={UserPage} />} />
-              <Route path="/admin/movies" element={<AdminPrivateRoute element={Movie} />} />
-              <Route path="/admin/add-movie" element={<AdminPrivateRoute element={AddMovie} />} />
-              <Route path="/admin/theatres" element={<AdminPrivateRoute element={TheatreList} />} />
-              
+              <Route
+                path="/admin/user-list"
+                element={<AdminPrivateRoute element={UserPage} />}
+              />
+              <Route
+                path="/admin/movies"
+                element={<AdminPrivateRoute element={Movie} />}
+              />
+              <Route
+                path="/admin/add-movie"
+                element={<AdminPrivateRoute element={AddMovie} />}
+              />
+              <Route
+                path="/admin/theatres"
+                element={<AdminPrivateRoute element={TheatreList} />}
+              />
 
               <Route path="/theatre" element={<Theatre />} />
               <Route path="/theatre/register" element={<TheatreRegister />} />
               <Route path="/theatre/login" element={<TheatreLogin />} />
               <Route path="/theatre/verify-email" element={<TheatreOtp />} />
-              <Route path="/theatre/dashboard" element={ <TheatrePrivateRoute element={TheatreDashboard}/>} />
-              <Route path="/theatre/shows" element={<TheatrePrivateRoute element={TheatreShows}/>} />
-              <Route path="/theatre/screens" element={<TheatrePrivateRoute element={TheatreScreens}/>} />
-              <Route path="/theatre/screens/edit-layout/:screenId" element={<TheatrePrivateRoute element={TheatreSeatLayoutEdit}/>} />
-              <Route path="/theatre/show/manage" element={<TheatrePrivateRoute element={TheatreShowMgmt}/>}/>
+              <Route
+                path="/theatre/dashboard"
+                element={<TheatrePrivateRoute element={TheatreDashboard} />}
+              />
+              <Route
+                path="/theatre/shows"
+                element={<TheatrePrivateRoute element={TheatreShows} />}
+              />
+              <Route
+                path="/theatre/screens"
+                element={<TheatrePrivateRoute element={TheatreScreens} />}
+              />
+              <Route
+                path="/theatre/screens/edit-layout/:screenId"
+                element={
+                  <TheatrePrivateRoute element={TheatreSeatLayoutEdit} />
+                }
+              />
+              <Route
+                path="/theatre/show/manage"
+                element={<TheatrePrivateRoute element={TheatreShowMgmt} />}
+              />
+              <Route
+                path="/theatre/show/manage/seats"
+                element={<TheatrePrivateRoute element={TheatreSideSeatBooking} />}
+              />
             </Routes>
           </Router>
         </NextUIProvider>
-        </TheatreAuthProvider>
-      </AdminAuthProvider>
-    </AuthProvider>
-  
+      </TheatreAuthProvider>
+    </AdminAuthProvider>
+  </AuthProvider>
 );

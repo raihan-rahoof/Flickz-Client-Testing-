@@ -11,11 +11,13 @@ import {
   Divider,
   Input,
   Spinner,
+  Button,
 } from "@nextui-org/react";
 import createAxiosInstance from "../../utlis/axiosinstance";
 import toast from "react-hot-toast";
 import formatDateString from "../../utlis/Dateformat";
 import formatTime12Hour from "../../utlis/formatTime12";
+import { useNavigate } from "react-router-dom";
 function ShowMgmtCompt() {
   const location = useLocation();
   const showId = location.state || {};
@@ -23,6 +25,7 @@ function ShowMgmtCompt() {
   const axiosInstance = createAxiosInstance("theatre");
   const [showDetails, setDetails] = useState({});
   const [serchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate()
 
   const fetchShowDetails = async () => {
     try {
@@ -124,6 +127,14 @@ function ShowMgmtCompt() {
                     {showDetails.screen.name}
                   </span>
                 </p>
+                <Button
+                  color="secondary"
+                  className="mt-2"
+                  radius="sm"
+                  onClick={() => navigate("/theatre/show/manage/seats",{state: showDetails})}
+                >
+                  Reserve Seats
+                </Button>
               </div>
             </div>
           </div>
@@ -152,7 +163,7 @@ function ShowMgmtCompt() {
                       className="fa-solid fa-dollar"
                       style={{ color: "green" }}
                     ></i>{" "}
-                    0000
+                    {showDetails.total_revenue_offline}
                   </p>
                 </div>
                 <div className="mt-4">
