@@ -17,6 +17,8 @@ import createAxiosInstance from "../../utlis/axiosinstance";
 import toast from "react-hot-toast";
 import formatDateString from "../../utlis/Dateformat";
 import formatTime12Hour from "../../utlis/formatTime12";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 function ShowMgmtCompt() {
   const location = useLocation();
@@ -54,16 +56,87 @@ function ShowMgmtCompt() {
   const filterBookings = (bookings) => {
     return bookings?.filter(
       (booking) =>
-        booking.user.first_name
+        booking.user?.first_name
           .toLowerCase()
           .includes(searchQuery.toLowerCase()) ||
-        booking.user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        booking.user.phone.includes(searchQuery) ||
+        booking.user?.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        booking.user?.phone.includes(searchQuery) ||
         booking.seat_number.some((seat) =>
           seat.toLowerCase().includes(searchQuery.toLowerCase())
         )
     );
   };
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Show and Booking Details", 20, 10);
+
+    const showData = [
+      ["Show Name", showDetails.show_name],
+      ["Movie Title", showDetails.movie.title],
+      ["Language", showDetails.movie.language],
+      ["Date", formatDateString(showDetails.date)],
+      [
+        "Time",
+        `${formatTime12Hour(showDetails.start_time)} - ${formatTime12Hour(
+          showDetails.end_time
+        )}`,
+      ],
+      ["Screen", showDetails.screen.name],
+      ["Total Revenue Online", showDetails.total_revenue_online],
+      ["Total Revenue Offline", showDetails.total_revenue_offline],
+      ["Total Revenue", showDetails.total_revenue],
+      ["Tickets Sold", showDetails.tickets_sold],
+      [
+        "Remaining Seats",
+        showDetails.screen.cols * showDetails.screen.rows -
+          showDetails.tickets_sold,
+      ],
+    ];
+
+    doc.autoTable({
+      head: [["Field", "Value"]],
+      body: showData,
+      startY: 20,
+    });
+
+    const bookingHeaders = ["Name", "Seats", "Email", "Phone", "Total Amount"];
+    const onlineBookings = filteredOnlineBookings?.map((item) => [
+      item.user?.first_name || "N/A",
+      item.seat_number.join(", "),
+      item.user?.email || "N/A",
+      item.user?.phone || "N/A",
+      `$ ${item.total_price}`,
+    ]);
+
+    const offlineBookings = filteredOfflineBookings?.map((item) => [
+      item.name,
+      item.seat_number.join(", "),
+      item.email,
+      item.phone,
+      `$ ${item.total_price}`,
+    ]);
+
+    doc.autoTable({
+      head: [bookingHeaders],
+      body: onlineBookings,
+      startY: doc.autoTable.previous.finalY + 10,
+      theme: "striped",
+      title: "Online Bookings",
+    });
+
+    doc.autoTable({
+      head: [bookingHeaders],
+      body: offlineBookings,
+      startY: doc.autoTable.previous.finalY + 10,
+      theme: "striped",
+      title: "Offline Bookings",
+    });
+
+    doc.save("show_details.pdf");
+  };
+
+
 
   useEffect(() => {
     fetchShowDetails();
@@ -223,13 +296,18 @@ function ShowMgmtCompt() {
           </div>
         </div>
         <div className="">
-          <Input
-            isClearable
-            startContent={<i className="fa-solid fa-search"></i>}
-            className="w-full sm:max-w-[44%] mb-4"
-            placeholder="Search by name..."
-            onChange={handleSearchQuery}
-          />
+          <div className="flex gap-2">
+            <Input
+              isClearable
+              startContent={<i className="fa-solid fa-search"></i>}
+              className="w-full sm:max-w-[44%] mb-4"
+              placeholder="Search by name..."
+              onChange={handleSearchQuery}
+            />
+            <Button color="secondary" onClick={downloadPDF}>
+              Details <i class="fa-solid fa-download"></i>{" "}
+            </Button>
+          </div>
           <Table aria-label="Example empty table">
             <TableHeader>
               <TableColumn>NAME</TableColumn>
@@ -239,28 +317,24 @@ function ShowMgmtCompt() {
               <TableColumn>TOTAL AMOUNT</TableColumn>
             </TableHeader>
             <TableBody emptyContent={"Nobody booked tickets yet"}>
-              {filteredOnlineBookings?.map((item, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{item.user.first_name}</TableCell>
-                    <TableCell>{item.seat_number.join(", ")}</TableCell>
-                    <TableCell>{item.user.email}</TableCell>
-                    <TableCell>{item.user.phone}</TableCell>
-                    <TableCell>$ {item.total_price}</TableCell>
-                  </TableRow>
-                );
-              })}
-              {filteredOfflineBookings?.map((item, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.seats.join(", ")}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                    <TableCell>{item.phone}</TableCell>
-                    <TableCell>$ {item.total_price}</TableCell>
-                  </TableRow>
-                );
-              })}
+              {filteredOnlineBookings?.map((item) => (
+                <TableRow key={`online-${item.id}`}>
+                  <TableCell>{item.user?.first_name || "N/A"}</TableCell>
+                  <TableCell>{item.seat_number.join(", ")}</TableCell>
+                  <TableCell>{item.user?.email || "N/A"}</TableCell>
+                  <TableCell>{item.user?.phone || "N/A"}</TableCell>
+                  <TableCell>$ {item.total_price}</TableCell>
+                </TableRow>
+              ))}
+              {filteredOfflineBookings?.map((item) => (
+                <TableRow key={`offline-${item.id}`}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.seat_number.join(", ")}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{item.phone}</TableCell>
+                  <TableCell>$ {item.total_price}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>

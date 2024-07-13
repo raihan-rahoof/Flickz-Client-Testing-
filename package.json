@@ -19,6 +19,8 @@
     "dayjs": "^1.11.10",
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.4",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "jwt-decode": "^4.0.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",

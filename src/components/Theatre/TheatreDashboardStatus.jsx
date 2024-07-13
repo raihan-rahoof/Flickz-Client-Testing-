@@ -4,7 +4,7 @@ function TheatreDashboardStatus() {
   return (
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   
-  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+  <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
     
     <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
       <div class="p-4 md:p-5">
