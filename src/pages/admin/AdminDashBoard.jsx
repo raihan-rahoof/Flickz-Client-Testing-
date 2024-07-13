@@ -48,7 +48,7 @@ function AdminDashBoard() {
 
                 <div class="mt-1 flex items-center gap-x-2">
                   <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                    <span className="text-green-400">$</span>
+                   
                     {dashboard.total_users}
                   </h3>
                 </div>
@@ -65,7 +65,7 @@ function AdminDashBoard() {
 
                 <div class="mt-1 flex items-center gap-x-2">
                   <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                    <span className="text-green-400">$</span>
+                    
                     {dashboard.total_theatres}
                   </h3>
                 </div>
@@ -82,7 +82,7 @@ function AdminDashBoard() {
 
                 <div class="mt-1 flex items-center gap-x-2">
                   <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                    <span className="text-green-400">$</span>
+                
                    {dashboard.total_movies}
                   </h3>
                 </div>
