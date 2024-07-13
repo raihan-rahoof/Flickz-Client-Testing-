@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Image,
   Table,
@@ -17,15 +17,15 @@ import createAxiosInstance from "../../utlis/axiosinstance";
 import toast from "react-hot-toast";
 import formatDateString from "../../utlis/Dateformat";
 import formatTime12Hour from "../../utlis/formatTime12";
-import { useNavigate } from "react-router-dom";
+
 function ShowMgmtCompt() {
   const location = useLocation();
   const showId = location.state || {};
   const [loading, setLoading] = useState(false);
   const axiosInstance = createAxiosInstance("theatre");
-  const [showDetails, setDetails] = useState({});
-  const [serchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate()
+  const [showDetails, setShowDetails] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const fetchShowDetails = async () => {
     try {
@@ -33,7 +33,7 @@ function ShowMgmtCompt() {
       const res = await axiosInstance.get(`/theatre/show/details/${showId}/`);
       console.log(res);
       if (res.status === 200) {
-        setDetails(res.data);
+        setShowDetails(res.data);
         setLoading(false);
       } else {
         setLoading(false);
@@ -51,16 +51,19 @@ function ShowMgmtCompt() {
     setSearchQuery(e.target.value);
   };
 
-  const filterBookings = showDetails.bookings?.filter(
-    (booking) =>
-      booking.user.first_name
-        .toLowerCase()
-        .includes(serchQuery.toLowerCase()) ||
-      booking.user.email.toLowerCase().includes(serchQuery.toLowerCase()) ||
-      booking.user.phone.includes(serchQuery) ||
-      booking.seat_number
-        .some((seat) => seat.toLowerCase().includes(serchQuery.toLowerCase()))
-  );
+  const filterBookings = (bookings) => {
+    return bookings?.filter(
+      (booking) =>
+        booking.user.first_name
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        booking.user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        booking.user.phone.includes(searchQuery) ||
+        booking.seat_number.some((seat) =>
+          seat.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    );
+  };
 
   useEffect(() => {
     fetchShowDetails();
@@ -74,13 +77,20 @@ function ShowMgmtCompt() {
     );
   }
 
-  if (!showDetails.show_name || !showDetails.movie || !showDetails.bookings) {
+  if (
+    !showDetails.show_name ||
+    !showDetails.movie ||
+    (!showDetails.bookings && !showDetails.offline_bookings)
+  ) {
     return (
       <div className="h-screen flex justify-center items-center">
         <Spinner label="Fetching data..." color="primary" />
       </div>
     );
   }
+
+  const filteredOnlineBookings = filterBookings(showDetails.bookings);
+  const filteredOfflineBookings = filterBookings(showDetails.offline_bookings);
 
   return (
     <div>
@@ -131,7 +141,11 @@ function ShowMgmtCompt() {
                   color="secondary"
                   className="mt-2"
                   radius="sm"
-                  onClick={() => navigate("/theatre/show/manage/seats",{state: showDetails})}
+                  onClick={() =>
+                    navigate("/theatre/show/manage/seats", {
+                      state: showDetails,
+                    })
+                  }
                 >
                   Reserve Seats
                 </Button>
@@ -225,7 +239,7 @@ function ShowMgmtCompt() {
               <TableColumn>TOTAL AMOUNT</TableColumn>
             </TableHeader>
             <TableBody emptyContent={"Nobody booked tickets yet"}>
-              {filterBookings?.map((item, index) => {
+              {filteredOnlineBookings?.map((item, index) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>{item.user.first_name}</TableCell>
@@ -236,8 +250,18 @@ function ShowMgmtCompt() {
                   </TableRow>
                 );
               })}
+              {filteredOfflineBookings?.map((item, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.seats.join(", ")}</TableCell>
+                    <TableCell>{item.email}</TableCell>
+                    <TableCell>{item.phone}</TableCell>
+                    <TableCell>$ {item.total_price}</TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
-            {/* <TableBody emptyContent={"No rows to display."}>{[]}</TableBody> */}
           </Table>
         </div>
       </div>
