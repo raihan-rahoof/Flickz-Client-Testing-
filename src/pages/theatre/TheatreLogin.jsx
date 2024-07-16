@@ -158,7 +158,7 @@ function TheatreLogin() {
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-300">
                 Doesn't have an account?{' '}
-                <Link to="/theatre/register" className="font-bold text-blue-400 no-underline hover:text-blue-300">
+                <Link to="/theatre/register" disabled={isLoading} className="font-bold text-blue-400 no-underline hover:text-blue-300">
                   Register
                 </Link>
               </p>

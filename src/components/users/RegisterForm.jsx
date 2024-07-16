@@ -49,19 +49,29 @@ function RegisterForm() {
     e.preventDefault();
     if (!email || !first_name || !last_name || !phone || !password || !password2) {
       toast.error("All details should be filled");
-    }else if(!isValidPassword(password)){
+    }else if (
+      !email.trim() ||
+      !first_name.trim() ||
+      !last_name.trim() ||
+      !phone.trim() ||
+      !password.trim() ||
+      !password2.trim()
+    ) {
+      toast.error("Please include the values")
+    } else if (!isValidPassword(password)) {
       Swal.fire({
-        text:"Password length should be 8 and must contain a upper&lowcase Letter also add numbers",
-        imageUrl: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN21qYWh5aWd1bHFvMWx1cnU4dzRjMDZvazU4ZHg5a2lza2g4MjBnNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Y02ORR28LCZzvbxD3z/giphy.gif",
+        text: "Password length should be 8 and must contain a upper&lowcase Letter also add numbers",
+        imageUrl:
+          "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN21qYWh5aWd1bHFvMWx1cnU4dzRjMDZvazU4ZHg5a2lza2g4MjBnNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Y02ORR28LCZzvbxD3z/giphy.gif",
         imageWidth: 400,
         imageHeight: 200,
-      })
-    }else if (password !== password2) {
+      });
+    } else if (password !== password2) {
       toast.error("Passwords do not match");
-    }else if(!isValidIndianPhoneNumber(phone)){
-      toast.error("Provide a valid Phone Number")
+    } else if (!isValidIndianPhoneNumber(phone)) {
+      toast.error("Provide a valid Phone Number");
     } else {
-      setLoading(true)
+      setLoading(true);
       axios
         .post("https://flickz-backend.duckdns.org/api/v1/auth/register/", form)
         .then((res) => {
@@ -135,10 +145,10 @@ function RegisterForm() {
 
         <div className="flex items-start flex-col justify-start">
           <label htmlFor="confirmPassword" className="text-sm text-gray-700 dark:text-gray-200 mr-2">Confirm Password:</label>
-          <input type="password" id="confirmPassword" name="password2" onChange={handleOnChange} value={password2} className="w-full px-3 dark:text-gray-200 dark:bg-gray-900 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"/>
+          <input type="password" disabled={isLoading} id="confirmPassword" name="password2" onChange={handleOnChange} value={password2} className="w-full px-3 dark:text-gray-200 dark:bg-gray-900 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"/>
         </div>
 
-        <button type="submit" className="bg-gradient-to-r from-[#427EF5] to-[#274A8F] text-white mt-4 font-medium py-2 px-4 rounded-md shadow-sm">{isLoading ? 
+        <button type="submit" disabled={isLoading} className="bg-gradient-to-r from-[#427EF5] to-[#274A8F] text-white mt-4 font-medium py-2 px-4 rounded-md shadow-sm">{isLoading ? 
        <BeatLoader
        color="#ffffff"
        cssOverride={{
