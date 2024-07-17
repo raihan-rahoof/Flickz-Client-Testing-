@@ -41,7 +41,8 @@ function RegisterForm() {
    }
   
    function isValidPassword(password) {
-    const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/;
+    const pattern =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     return pattern.test(password);
    }
 
