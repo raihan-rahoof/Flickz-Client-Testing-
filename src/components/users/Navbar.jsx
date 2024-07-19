@@ -85,7 +85,7 @@ function Navbar() {
             <nav className="bg-transparent">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">FLICKZ</span>
+                        <span className="self-center text-[2rem] font-semibold whitespace-nowrap dark:text-blue-500  rounded px-2">FLICKZ </span>
                     </a>
                     <div className="nav-right flex gap-2">
                         <div className="relative hidden md:block">
