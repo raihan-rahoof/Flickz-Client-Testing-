@@ -139,7 +139,7 @@ function MoviesList() {
 
     return (
         <>
-            <div className='h-auto bg-[#1b1c31]'>
+            <div className='h-screen bg-[#1b1c31]'>
                 <div className="container mx-auto px-4 py-8">
                     <h2 className="text-3xl font-semibold mb-4 text-white">Movie List</h2>
                     <Link to="/admin/add-movie">
