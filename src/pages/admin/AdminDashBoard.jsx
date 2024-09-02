@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import AdminNav from './AdminNav'
 import createAxiosInstance from '../../utlis/axiosinstance';
+import AdminBannerCmp from '../../components/admin/AdminBannerCmp';
 function AdminDashBoard() {
     const axiosInstance = createAxiosInstance("admin");
     const [dashboard, setDashboard] = useState({
@@ -48,7 +49,6 @@ function AdminDashBoard() {
 
                 <div class="mt-1 flex items-center gap-x-2">
                   <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                   
                     {dashboard.total_users}
                   </h3>
                 </div>
@@ -65,7 +65,6 @@ function AdminDashBoard() {
 
                 <div class="mt-1 flex items-center gap-x-2">
                   <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                    
                     {dashboard.total_theatres}
                   </h3>
                 </div>
@@ -82,8 +81,7 @@ function AdminDashBoard() {
 
                 <div class="mt-1 flex items-center gap-x-2">
                   <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
-                
-                   {dashboard.total_movies}
+                    {dashboard.total_movies}
                   </h3>
                 </div>
               </div>
@@ -106,6 +104,7 @@ function AdminDashBoard() {
             </div>
           </div>
         </div>
+        <AdminBannerCmp />
       </div>
     </>
   );
