@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import AdminNav from './AdminNav'
 import createAxiosInstance from '../../utlis/axiosinstance';
-import AdminBannerCmp from '../../components/admin/AdminBannerCmp';
+
 function AdminDashBoard() {
     const axiosInstance = createAxiosInstance("admin");
     const [dashboard, setDashboard] = useState({
