@@ -38,9 +38,13 @@ console.log(formData);
  const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/.test(formData.password)){
-    toast.error("Provide a strong password ")
-    return
+  if (
+    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/.test(
+      formData.password
+    )
+  ) {
+    toast.error("Provide a strong password ");
+    return;
   }
 
   

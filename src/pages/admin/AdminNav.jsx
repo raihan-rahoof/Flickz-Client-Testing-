@@ -1,36 +1,35 @@
-import React , {useContext} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import createAxiosInstance from '../../utlis/axiosinstance';
-import AdminAuthContext from '../../Context/AdminAuthContext';
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import createAxiosInstance from "../../utlis/axiosinstance";
+import AdminAuthContext from "../../Context/AdminAuthContext";
+import { Spinner } from "@nextui-org/react";
 
 function AdminNav(props) {
-  
-    
-    const jwt_token = JSON.parse(localStorage.getItem('admin_access'));
-    const refresh_token = JSON.parse(localStorage.getItem('admin_refresh'));
-    const navigate = useNavigate()
-    const {isAdminLoggedIn,setIsAdminLoggedIn}= useContext(AdminAuthContext)
+  const jwt_token = JSON.parse(localStorage.getItem("admin_access"));
+  const refresh_token = JSON.parse(localStorage.getItem("admin_refresh"));
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { isAdminLoggedIn, setIsAdminLoggedIn } = useContext(AdminAuthContext);
 
-    const axiosInstance = createAxiosInstance('admin')
+  const axiosInstance = createAxiosInstance("admin");
 
-    
-    
-
-    const handleLogout = async () => {
-        const res = await axiosInstance.post('/auth/logout/', { 'refresh_token': refresh_token , 'access_token':jwt_token });
-        if (res.status === 200) {
-            localStorage.removeItem('admin_access');
-            localStorage.removeItem('admin_refresh');
-            localStorage.removeItem('admin');
-            
-            navigate('/admin')
-            setIsAdminLoggedIn(false)
-            toast.success('Logout success');
-        }
+  const handleLogout = async () => {
+    setLoading(true);
+    const res = await axiosInstance.post("/auth/logout/", {
+      refresh_token: refresh_token,
+      access_token: jwt_token,
+    });
+    if (res.status === 200) {
+      localStorage.removeItem("admin_access");
+      localStorage.removeItem("admin_refresh");
+      localStorage.removeItem("admin");
+      setLoading(false);
+      navigate("/admin");
+      setIsAdminLoggedIn(false);
+      toast.success("Logout success");
     }
-
-  
-
+    setLoading(false);
+  };
 
   return (
     <>
@@ -50,7 +49,7 @@ function AdminNav(props) {
               type="button"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Logout
+              {loading ? <Spinner size="sm" color="default"  /> : "Log out"}
             </button>
             <button
               data-collapse-toggle="navbar-cta"
@@ -84,7 +83,7 @@ function AdminNav(props) {
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <Link
-                  to={'/admin/dashboard'}
+                  to={"/admin/dashboard"}
                   className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent "
                   aria-current="page"
                 >
