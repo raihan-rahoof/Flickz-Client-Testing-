@@ -6,6 +6,7 @@ import {
   CardFooter,
   Image,
   Modal,
+  Spinner,
   ModalContent,
   ModalHeader,
   ModalBody,
@@ -61,6 +62,7 @@ const customStyles = {
 function TheatreShowCards() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [shows, setShows] = useState([]);
+  const [loading,setLoading] = useState(true)
   const [movieList, setMovieList] = useState([]);
   const [screens, setScreens] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -204,9 +206,12 @@ function TheatreShowCards() {
 
   const fetchShows = async () => {
     try {
+      setLoading(true)
       const response = await axiosInstance.get('theatre/shows/');
       setShows(response.data);
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       toast.error('Failed to fetch shows, please refresh the page.');
     }
   };
@@ -220,67 +225,74 @@ function TheatreShowCards() {
         <Button className="bg-indigo-500 mb-4" onPress={onOpen}>
           Shows +
         </Button>
-        <div className="gap-2 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
-          {shows.length > 0 && (
-            <>
-              {shows.map((show) => (
-                <Card key={show.id} className="" shadow="sm" isPressable>
-                  <CardBody className="overflow-visible p-0">
-                    <Image
-                      shadow="sm"
-                      radius="lg"
-                      width="100%"
-                      className="w-full object-cover"
-                      src={show.movie.poster}
-                    />
-                  </CardBody>
-                  <CardFooter className="text-small flex flex-col justify-center items-start">
-                    <h2 className="text-lg font-bold">{show.show_name}</h2>
-                    <h3 className="font-bold font-md">{show.movie.title}</h3>
-                    <p className="text-default-500">
-                      Language : {show.movie.language}
-                    </p>
-                    <p className="text-default-500">
-                      Date : {formatDateString(show.date)}
-                    </p>
-                    <p className="text-default-500">
-                      {formatTime12Hour(show.start_time)} -{" "}
-                      {formatTime12Hour(show.end_time)}
-                    </p>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        radius="full"
-                        color="danger"
-                        variant="shadow"
-                        className="mt-2"
-                        onPress={() => {
-                          setSelectedShow(show);
-                          setDeleteModal(true);
-                        }}
-                      >
-                        <i className="fa-solid fa-trash"></i>
-                      </Button>
-                      <Button
-                        size="sm"
-                        radius="full"
-                        color="primary"
-                        variant="shadow"
-                        className="mt-2"
-                        onClick={()=>{ navigate('/theatre/show/manage',{state:show.id});
-                        
-                      
-                      }}
-                      >
-                        <i className="fa-solid fa-eye"></i>
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              ))}
-            </>
-          )}
-        </div>
+        {loading ? (
+          <div className="h-screen flex justify-center items-center">
+            <Spinner size="lg" color="secondary" label='Loading...' />
+          </div>
+        ) : (
+          <div className="gap-2 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
+            {shows.length > 0 && (
+              <>
+                {shows.map((show) => (
+                  <Card key={show.id} className="" shadow="sm" isPressable>
+                    <CardBody className="overflow-visible p-0">
+                      <Image
+                        shadow="sm"
+                        radius="lg"
+                        width="100%"
+                        className="w-full object-cover"
+                        src={show.movie.poster}
+                      />
+                    </CardBody>
+                    <CardFooter className="text-small flex flex-col justify-center items-start">
+                      <h2 className="text-lg font-bold">{show.show_name}</h2>
+                      <h3 className="font-bold font-md">{show.movie.title}</h3>
+                      <p className="text-default-500">
+                        Language : {show.movie.language}
+                      </p>
+                      <p className="text-default-500">
+                        Date : {formatDateString(show.date)}
+                      </p>
+                      <p className="text-default-500">
+                        {formatTime12Hour(show.start_time)} -{" "}
+                        {formatTime12Hour(show.end_time)}
+                      </p>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          radius="full"
+                          color="danger"
+                          variant="shadow"
+                          className="mt-2"
+                          onPress={() => {
+                            setSelectedShow(show);
+                            setDeleteModal(true);
+                          }}
+                        >
+                          <i className="fa-solid fa-trash"></i>
+                        </Button>
+                        <Button
+                          size="sm"
+                          radius="full"
+                          color="primary"
+                          variant="shadow"
+                          className="mt-2"
+                          onClick={() => {
+                            navigate("/theatre/show/manage", {
+                              state: show.id,
+                            });
+                          }}
+                        >
+                          <i className="fa-solid fa-eye"></i>
+                        </Button>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       <Modal

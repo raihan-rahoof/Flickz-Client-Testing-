@@ -8,6 +8,7 @@ import createAxiosInstance from '../../utlis/axiosinstance';
 import { Spinner } from '@nextui-org/react';
 
 
+
 function Home() {
   const {isLoggedIn,setIsLoggedIn} = useContext(AuthContext)
   const [movies, setMovies] = useState([]);
@@ -37,24 +38,24 @@ function Home() {
   
   return (
     <>
-    {isloading ? 
-    <div className="h-screen flex justify-center items-center">
-    <Spinner size='lg' label='Loading...'/>
-    </div>
-    :
-    <>
-      <div
-        className="home-container"
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-        }}
-      >
-        <Navbar />
-        <div className="home-overlay"></div>
-      </div>
-      <RowPost heading="Latest" movies={movies} isloading={isloading} />
-    </>
-      }
+      {isloading ? (
+        <div className="h-screen flex justify-center items-center">
+          <Spinner size="lg" label="Loading..." />
+        </div>
+      ) : (
+        <>
+          <div
+            className="home-container"
+            style={{
+              backgroundImage: 'url("images/homebg.webp")',
+            }}
+          >
+            <Navbar />
+            <div className="home-overlay"></div>
+          </div>
+          <RowPost heading="Latest" movies={movies} isloading={isloading} />
+        </>
+      )}
     </>
   );
 }

@@ -167,6 +167,7 @@ function ShowMgmtCompt() {
 
   return (
     <div>
+      
       <div className="p-4 flex flex-col gap-4">
         <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
           <div className="p-4 md:p-5  min-h-[410px] flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">

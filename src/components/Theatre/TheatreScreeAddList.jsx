@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 
 function TheatreScreenAddList() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isloading,setLoading] = useState(false)
   const [screens, setScreens] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedScreen, setSelectedScreen] = useState(null);
@@ -116,14 +117,17 @@ function TheatreScreenAddList() {
 
   const createScreen = async (formData) => {
     try {
+      setLoading(true)
       const res = await axiosInstance.post('/screen/add-screen/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       toast.success('Screen created successfully');
+      setLoading(false);
       console.log('Screen created:', res.data);
     } catch (error) {
+      setLoading(false);
       console.log(error);
       throw new Error('Failed to create screen');
     }
@@ -131,14 +135,17 @@ function TheatreScreenAddList() {
 
   const updateScreen = async (screenId, formData) => {
     try {
+      setLoading(true);
       const res = await axiosInstance.put(`/screen/update-screen/${screenId}/`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       toast.success('Screen updated successfully');
+      setLoading(false);
       console.log('Screen updated:', res.data);
     } catch (error) {
+      setLoading(false);
       console.log(error);
       throw new Error('Failed to update screen');
     }
@@ -180,44 +187,88 @@ function TheatreScreenAddList() {
           <h1 className="text-3xl font-semibold ">Manage Screens</h1>
         </div>
 
-        <Button className="bg-indigo-500 mb-4" onPress={() => { setIsEditMode(false); setFormData({ name: '', quality: '', sound: '', image: '', rows: 10, cols: 10, sections: [] }); onOpen(); }}>
+        <Button
+          className="bg-indigo-500 mb-4"
+          onPress={() => {
+            setIsEditMode(false);
+            setFormData({
+              name: "",
+              quality: "",
+              sound: "",
+              image: "",
+              rows: 10,
+              cols: 10,
+              sections: [],
+            });
+            onOpen();
+          }}
+        >
           Add Screen
         </Button>
         <div className="gap-2 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
           {screens.length > 0 &&
             screens.map((screen) => (
-              <Card key={screen.id} className="" shadow="sm" isPressable onPress={() => handleCardClick(screen)}>
+              <Card
+                key={screen.id}
+                className=""
+                shadow="sm"
+                isPressable
+                onPress={() => handleCardClick(screen)}
+              >
                 <CardBody className="overflow-visible p-0">
-                  <Image shadow="sm" radius="lg" width="100%" className="w-full object-cover" src={screen.image} />
+                  <Image
+                    shadow="sm"
+                    radius="lg"
+                    width="100%"
+                    className="w-full object-cover"
+                    src={screen.image}
+                  />
                 </CardBody>
                 <CardFooter className="text-small flex flex-col justify-center items-start">
                   <h2 className="text-lg font-bold">{screen.name}</h2>
-                  <h3 className="font-bold font-md"><i class="fa-solid fa-tv"></i> {screen.quality}</h3>
-                  <p className="text-default-500 mt-2"><i class="fa-solid fa-volume-low"></i> {screen.sound}</p>
+                  <h3 className="font-bold font-md">
+                    <i class="fa-solid fa-tv"></i> {screen.quality}
+                  </h3>
+                  <p className="text-default-500 mt-2">
+                    <i class="fa-solid fa-volume-low"></i> {screen.sound}
+                  </p>
                   <div className="flex gap-3">
-                    
                     {screen.sections.map((section) => (
                       <p key={section.name} className="text-default-500">
                         <i class="fa-solid fa-bars"></i> {section.name},
                       </p>
                     ))}
                   </div>
-                 <Button size='sm' className='mt-2 border bg-transparent border-white hover:bg-indigo-500 hover:border-none' >
-                  <Link to={`/theatre/screens/edit-layout/${screen.id}`}  variant='faded' >
-                    Edit layout
-                  </Link>
-                 </Button>
+                  <Button
+                    size="sm"
+                    className="mt-2 border bg-transparent border-white hover:bg-indigo-500 hover:border-none"
+                  >
+                    <Link
+                      to={`/theatre/screens/edit-layout/${screen.id}`}
+                      variant="faded"
+                    >
+                      Edit layout
+                    </Link>
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
         </div>
       </div>
 
-      <Modal size="2xl" isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center" backdrop="blur">
+      <Modal
+        size="2xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="top-center"
+        backdrop="blur"
+      >
         <ModalContent>
-          {onClose => (
+          {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-indigo-400">{isEditMode ? 'Edit Screen' : 'Create Your Screen'}</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-indigo-400">
+                {isEditMode ? "Edit Screen" : "Create Your Screen"}
+              </ModalHeader>
               <ModalBody>
                 <Input
                   autoFocus
@@ -250,25 +301,31 @@ function TheatreScreenAddList() {
                   onChange={handleInputChange}
                   required
                 />
-                <Tooltip content={
-                  <div className="px-1 py-2 w-[10rem]">
-                    <div className="text-small font-bold text-indigo-500">Hey!</div>
-                    <div className="text-tiny">When adding rows and cols make sure you include free spaces also  </div>
-                  </div>
-                }
-                placement='left'
+                <Tooltip
+                  content={
+                    <div className="px-1 py-2 w-[10rem]">
+                      <div className="text-small font-bold text-indigo-500">
+                        Hey!
+                      </div>
+                      <div className="text-tiny">
+                        When adding rows and cols make sure you include free
+                        spaces also{" "}
+                      </div>
+                    </div>
+                  }
+                  placement="left"
                 >
-                <Input
-                  labelPlacement="outside"
-                  label="Number of Rows"
-                  placeholder="Enter the number of rows"
-                  variant="bordered"
-                  type="number"
-                  name="rows"
-                  value={formData.rows}
-                  onChange={handleInputChange}
-                  required
-                />
+                  <Input
+                    labelPlacement="outside"
+                    label="Number of Rows"
+                    placeholder="Enter the number of rows"
+                    variant="bordered"
+                    type="number"
+                    name="rows"
+                    value={formData.rows}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </Tooltip>
                 <Input
                   labelPlacement="outside"
@@ -299,7 +356,10 @@ function TheatreScreenAddList() {
 
                 <label className="text-sm">Add section</label>
                 {formData.sections.map((section, index) => (
-                  <div key={index} className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+                  <div
+                    key={index}
+                    className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4"
+                  >
                     <Input
                       type="text"
                       label="Section Name"
@@ -307,7 +367,7 @@ function TheatreScreenAddList() {
                       variant="bordered"
                       name="name"
                       value={section.name}
-                      onChange={e => handleSectionChange(index, e)}
+                      onChange={(e) => handleSectionChange(index, e)}
                       className="max-w-[10rem]"
                     />
                     <Input
@@ -317,7 +377,7 @@ function TheatreScreenAddList() {
                       variant="bordered"
                       name="rows"
                       value={section.rows}
-                      onChange={e => handleSectionChange(index, e)}
+                      onChange={(e) => handleSectionChange(index, e)}
                       className="max-w-[10rem]"
                     />
                     <Input
@@ -327,7 +387,7 @@ function TheatreScreenAddList() {
                       variant="bordered"
                       name="price"
                       value={section.price}
-                      onChange={e => handleSectionChange(index, e)}
+                      onChange={(e) => handleSectionChange(index, e)}
                       className="max-w-[10rem]"
                     />
                     <Button color="danger" onPress={() => removeSection(index)}>
@@ -364,9 +424,13 @@ function TheatreScreenAddList() {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button className='bg-indigo-500' onPress={handleSubmit}>
-                  Save
-                </Button>
+                {isloading ? (
+                  <Button isLoading> Creating..</Button>
+                ) : (
+                  <Button className="bg-indigo-500" onPress={handleSubmit}>
+                    Save
+                  </Button>
+                )}
               </ModalFooter>
             </>
           )}
