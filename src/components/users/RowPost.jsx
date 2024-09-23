@@ -4,31 +4,12 @@ import createAxiosInstance from '../../utlis/axiosinstance'
 import { Link, useNavigate } from 'react-router-dom'
 import { Spinner } from "@nextui-org/spinner";
 
-function RowPost(props) {
+function RowPost({heading,movies,isloading}) {
 
-    const [movies , setMovies] = useState([])
-    const [isloading,setloading]=useState(false)
-    const axiosInstance = createAxiosInstance('admin')
+    
     const navigate = useNavigate()
 
-    const fetchMovies = async ()=>{
-        setloading(true)
-        try{
-            const res = await axiosInstance.get('/home/movies')
-            setloading(false)
-            setMovies(res.data)
-            console.log(res.data);
-        }catch(error){
-            setloading(false);
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-      fetchMovies();
     
-      
-    }, [])
 
     const handlePosterClick = (id)=>{
         navigate(`/movie/${id}`)
@@ -39,7 +20,7 @@ function RowPost(props) {
   return (
     <>
       <div className="Row">
-        <h3>{props.heading}</h3>
+        <h3>{heading}</h3>
         {isloading ? (
           <div className="posters flex justify-center items-center">
             <Spinner label="Loading..." color="primary"  />

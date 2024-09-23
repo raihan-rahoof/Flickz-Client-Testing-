@@ -7,6 +7,7 @@ function UserList() {
 
     const axiosInstance = createAxiosInstance('admin')
     const [user , setUser] = useState([])
+    const [loading,setLoading] = useState(false)
     
     
     const fetchUsers = async () => {

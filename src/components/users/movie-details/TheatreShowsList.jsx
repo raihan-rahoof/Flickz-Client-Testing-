@@ -4,10 +4,11 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import formatTime12Hour from '../../../utlis/formatTime12';
 import formatDateString from '../../../utlis/Dateformat';
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input, Spinner } from '@nextui-org/react';
 
 function TheatreShowsList({ movie_id }) {
   const [shows, setShows] = useState([]);
+  const [loading,isloading] = useState(false)
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTheatres, setFilteredTheatres] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
@@ -28,10 +29,13 @@ function TheatreShowsList({ movie_id }) {
 
   const fetchShows = async () => {
     try {
+      isloading(true)
       const res = await axiosInstance.get(`/theatre/movies/${movie_id}/available-shows/`);
       setShows(res.data);
       filterShows(res.data, userProfile);
+      isloading(false);
     } catch (error) {
+      isloading(false);
       toast.error('There was an error fetching the shows!');
       console.log(error);
     }
@@ -153,7 +157,11 @@ function TheatreShowsList({ movie_id }) {
             ))}
           </div>
         </div>
-
+        { loading ? 
+        <div className="space-y-4 bg-[#101824] p-8 rounded-lg flex justify-center items-center">
+        <Spinner/>
+        </div>
+        :
         <div className="space-y-4 bg-[#101824] p-8 rounded-lg">
           {Object.keys(groupedShows).map(theatreName =>
             Object.keys(groupedShows[theatreName]).map(date => (
@@ -174,6 +182,7 @@ function TheatreShowsList({ movie_id }) {
             ))
           )}
         </div>
+        }
       </div>
     </>
   );
