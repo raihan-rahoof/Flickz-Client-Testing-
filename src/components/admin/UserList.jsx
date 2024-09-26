@@ -1,6 +1,7 @@
 import React , {useState,useEffect} from 'react'
 import createAxiosInstance from '../../utlis/axiosinstance'
 import axios from 'axios'
+import { Spinner } from '@nextui-org/react'
 
 
 function UserList() {
@@ -12,10 +13,14 @@ function UserList() {
     
     const fetchUsers = async () => {
       try {
+        setLoading(true)
           const res = await axiosInstance.get('/cadmin/admin/user-list');
           setUser(res.data);
+          setLoading(false);
           console.log(res.data)
+
       } catch (error) {
+        setLoading(false);
           console.log('error', error);
       }
   };
@@ -41,6 +46,14 @@ function UserList() {
             console.error('Error blocking/unblocking user:', error);
         }
     };
+
+    if (loading){
+      return(
+        <div className="h-[30rem] flex justify-center items-center">
+          <Spinner size='lg' lable='Loading please wait ...'/>
+        </div>
+      )
+    }
 
   return (
     <div className="p-[5px]">

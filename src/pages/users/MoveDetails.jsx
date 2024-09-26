@@ -6,6 +6,7 @@ import MoiveInfo from '../../components/users/movie-details/MovieInfo';
 import axios from 'axios';
 import YouTube from 'react-youtube';
 import { Spinner } from '@nextui-org/react';
+import Navbar from '../../components/users/Navbar';
 
 function MoveDetails() {
   const apiKey = '1e8ca15750c58626a3d6735c10534c73';
@@ -106,25 +107,35 @@ function MoveDetails() {
 
   return (
     <>
-      {showTrailer && videoId ? (
-        <>
-          <YouTube className="cover-container" videoId={videoId} opts={opts} />
-          <div className="cover-overlay"></div>
-        </>
-      ) : (
-        <div className="cover-container" style={{ backgroundImage: `url(${movie.cover_image})` }}>
-          <div className="cover-overlay"></div>
-        </div>
-      )}
+     <Navbar/>
+      <div className="">
+        {showTrailer && videoId ? (
+          <>
+            <YouTube
+              className="cover-container"
+              videoId={videoId}
+              opts={opts}
+            />
+            <div className="cover-overlay"></div>
+          </>
+        ) : (
+          <div
+            className="cover-container"
+            style={{ backgroundImage: `url(${movie.cover_image})` }}
+          >
+            <div className="cover-overlay"></div>
+          </div>
+        )}
 
-      <MoiveInfo
-        flim={movie}
-        details={details}
-        cast={cast}
-        url={imgUrl}
-        showTrailer={showTrailer}
-        toggleTrailer={toggleTrailer}
-      />
+        <MoiveInfo
+          flim={movie}
+          details={details}
+          cast={cast}
+          url={imgUrl}
+          showTrailer={showTrailer}
+          toggleTrailer={toggleTrailer}
+        />
+      </div>
     </>
   );
 }
