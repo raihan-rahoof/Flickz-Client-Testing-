@@ -39,42 +39,89 @@ export default function TheatreNav(props) {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-         <NavbarItem>
-          <RouterLink to='/theatre/dashboard' className={`hover:cursor-pointer ${props.now === 'dashboard' && 'text-indigo-500'}`}>
+        <NavbarItem>
+          <RouterLink
+            to="/theatre/dashboard"
+            className={`hover:cursor-pointer ${
+              props.now === "dashboard" && "text-indigo-500"
+            }`}
+          >
             Dashboard
           </RouterLink>
-        </NavbarItem> 
+        </NavbarItem>
         <NavbarItem>
-          <RouterLink to='/theatre/shows' className={`hover:cursor-pointer ${props.now === 'Shows' && 'text-indigo-500'}`}>
+          <RouterLink
+            to="/theatre/shows"
+            className={`hover:cursor-pointer ${
+              props.now === "Shows" && "text-indigo-500"
+            }`}
+          >
             Shows
           </RouterLink>
         </NavbarItem>
         <NavbarItem>
-          <RouterLink to='/theatre/screens' className={`hover:cursor-pointer ${props.now === 'screens' && 'text-indigo-500'}`}>
+          <RouterLink
+            to="/theatre/screens"
+            className={`hover:cursor-pointer ${
+              props.now === "screens" && "text-indigo-500"
+            }`}
+          >
             Screens
+          </RouterLink>
+        </NavbarItem>
+        <NavbarItem>
+          <RouterLink
+            to="/theatre/profile"
+            className={`hover:cursor-pointer ${
+              props.now === "profile" && "text-indigo-500"
+            }`}
+          >
+            Profile
           </RouterLink>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={RouterLink} onClick={handleLogout} className="bg-indigo-500" to="#">
+          <Button
+            as={RouterLink}
+            onClick={handleLogout}
+            className="bg-indigo-500"
+            to="#"
+          >
             Log out
           </Button>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
         <NavbarMenuItem>
-          <RouterLink to='/theatre/dashboard' className={`${props.now === 'dashboard' && 'text-indigo-500'}`}>
+          <RouterLink
+            to="/theatre/dashboard"
+            className={`${props.now === "dashboard" && "text-indigo-500"}`}
+          >
             Dashboard
           </RouterLink>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <RouterLink to='/theatre/shows' className={`${props.now === 'Shows' && 'text-indigo-500'}`}>
+          <RouterLink
+            to="/theatre/shows"
+            className={`${props.now === "Shows" && "text-indigo-500"}`}
+          >
             Shows
           </RouterLink>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <RouterLink to='/theatre/screens' className={`${props.now === 'screens' && 'text-indigo-500'}`}>
+          <RouterLink
+            to="/theatre/screens"
+            className={`${props.now === "screens" && "text-indigo-500"}`}
+          >
+            Screens
+          </RouterLink>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <RouterLink
+            to="/theatre/screens"
+            className={`${props.now === "screens" && "text-indigo-500"}`}
+          >
             Screens
           </RouterLink>
         </NavbarMenuItem>

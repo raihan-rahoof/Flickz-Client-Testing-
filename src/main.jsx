@@ -40,6 +40,7 @@ import TheatrePrivateRoute from './utlis/TheatrePrivateRoute';
 import TheatreShowMgmt from './pages/theatre/theatreManagment/TheatreShowMgmt';
 import TheatreSideSeatBooking from './pages/theatre/theatreManagment/TheatreSideSeatBooking';
 import AdminDashBoard from './pages/admin/AdminDashBoard';
+import TheatreProfile from './pages/theatre/theatreManagment/TheatreProfile';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
@@ -83,7 +84,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route path="/payment-failed" element={<PaymentFailed />} />
 
               <Route path="/admin" element={<AdminLogin />} />
-              <Route path='/admin/dashboard' element={<AdminDashBoard/>}/>
+              <Route path="/admin/dashboard" element={<AdminDashBoard />} />
               <Route
                 path="/admin/user-list"
                 element={<AdminPrivateRoute element={UserPage} />}
@@ -118,6 +119,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 element={<TheatrePrivateRoute element={TheatreScreens} />}
               />
               <Route
+                path="/theatre/profile"
+                element={<TheatrePrivateRoute element={TheatreProfile} />}
+              />
+
+              <Route
                 path="/theatre/screens/edit-layout/:screenId"
                 element={
                   <TheatrePrivateRoute element={TheatreSeatLayoutEdit} />
@@ -129,7 +135,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               />
               <Route
                 path="/theatre/show/manage/seats"
-                element={<TheatrePrivateRoute element={TheatreSideSeatBooking} />}
+                element={
+                  <TheatrePrivateRoute element={TheatreSideSeatBooking} />
+                }
               />
             </Routes>
           </Router>
