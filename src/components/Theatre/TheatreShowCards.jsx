@@ -175,6 +175,18 @@ function TheatreShowCards() {
   };
 
   const handleSave = async () => {
+    if (
+      !formData.show_name ||
+      !formData.movie ||
+      !formData.screen ||
+      !formData.date ||
+      !formData.theatre ||
+      !formData.start_time ||
+      !formData.end_time
+    ) {
+      toast.error("Please fill out all fields before submitting.");
+      return; 
+    }
     try {
       const simplifiedFormData = {
         show_name: formData.show_name,

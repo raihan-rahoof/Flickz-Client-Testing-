@@ -223,12 +223,12 @@ function LoginForm() {
               </a>
             </h3>
           </div>
-          <div className="py-3 flex items-center text-sm text-gray-800 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-white dark:before:border-neutral-600 dark:after:border-neutral-600">Or </div>
+          {/* <div className="py-3 flex items-center text-sm text-gray-800 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-white dark:before:border-neutral-600 dark:after:border-neutral-600">Or </div>
           <div className="googleContainer" >
               <div className="gsignIn" id='signInDiv'>
                 
               </div>
-          </div>
+          </div> */}
 
           {/* <div
             className="text-gray-500 flex text-center flex-col mt-4 items-center text-sm"
