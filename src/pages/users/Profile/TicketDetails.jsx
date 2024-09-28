@@ -49,7 +49,7 @@ function TicketDetails() {
                 <Image
                   alt="Woman listing to music"
                   className=""
-                  src={`https://flickz-backend.duckdns.org${item.show.movie.poster}`}
+                  src={item.show.movie.poster}
                 />
                 <CardFooter className="flex flex-col bg-[#0F0F14]/90  overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
                   <p className="font-bold text-lg text-white">
@@ -64,9 +64,16 @@ function TicketDetails() {
                     {formatTime12Hour(item.show.end_time)}
                   </p>
                   {item.ticket_expiration ? (
-                    <p className="text-md text-red-600 ">
-                     Expired
-                    </p>
+                    // <p className="text-md text-red-600 ">
+                    //  Expired
+                    // </p>
+                    <Link
+                      to={`/tickets/details/${item.id}`}
+                      state={{ booking: item }}
+                      className="text-tiny text-white bg-white/20 p-2 rounded-lg"
+                    >
+                      See ticket
+                    </Link>
                   ) : (
                     <Link
                       to={`/tickets/details/${item.id}`}

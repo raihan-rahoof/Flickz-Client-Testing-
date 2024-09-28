@@ -101,37 +101,44 @@ function ShowMgmtCompt() {
     });
 
     const bookingHeaders = ["Name", "Seats", "Email", "Phone", "Total Amount"];
-    const onlineBookings = filteredOnlineBookings?.map((item) => [
-      item.user?.first_name || "N/A",
-      item.seat_number.join(", "),
-      item.user?.email || "N/A",
-      item.user?.phone || "N/A",
-      `$ ${item.total_price}`,
-    ]);
 
-    const offlineBookings = filteredOfflineBookings?.map((item) => [
-      item.name,
-      item.seat_number.join(", "),
-      item.email,
-      item.phone,
-      `$ ${item.total_price}`,
-    ]);
+    
+    if (filteredOnlineBookings?.length > 0) {
+      doc.text("Online Bookings", 20, doc.lastAutoTable.finalY + 10); 
+      const onlineBookings = filteredOnlineBookings.map((item) => [
+        item.user?.first_name || "N/A",
+        item.seat_number.join(", "),
+        item.user?.email || "N/A",
+        item.user?.phone || "N/A",
+        `$ ${item.total_price}`,
+      ]);
 
-    doc.autoTable({
-      head: [bookingHeaders],
-      body: onlineBookings,
-      startY: doc.autoTable.previous.finalY + 10,
-      theme: "striped",
-      title: "Online Bookings",
-    });
+      doc.autoTable({
+        head: [bookingHeaders],
+        body: onlineBookings,
+        startY: doc.lastAutoTable.finalY + 15,
+        theme: "striped",
+      });
+    }
 
-    doc.autoTable({
-      head: [bookingHeaders],
-      body: offlineBookings,
-      startY: doc.autoTable.previous.finalY + 10,
-      theme: "striped",
-      title: "Offline Bookings",
-    });
+   
+    if (filteredOfflineBookings?.length > 0) {
+      doc.text("Offline Bookings", 20, doc.lastAutoTable.finalY + 10); 
+      const offlineBookings = filteredOfflineBookings.map((item) => [
+        item.name,
+        item.seat_number.join(", "),
+        item.email,
+        item.phone,
+        `$ ${item.total_price}`,
+      ]);
+
+      doc.autoTable({
+        head: [bookingHeaders],
+        body: offlineBookings,
+        startY: doc.lastAutoTable.finalY + 15,
+        theme: "striped",
+      });
+    }
 
     doc.save("show_details.pdf");
   };

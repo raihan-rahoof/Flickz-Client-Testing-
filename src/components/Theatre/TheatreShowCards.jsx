@@ -60,26 +60,27 @@ const customStyles = {
 };
 
 function TheatreShowCards() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [shows, setShows] = useState([]);
-  const [loading,setLoading] = useState(true)
-  const [movieList, setMovieList] = useState([]);
-  const [screens, setScreens] = useState([]);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedShow, setSelectedShow] = useState(null);
-  const theatreData = JSON.parse(localStorage.getItem('theatre'));
-  const theatreId = theatreData.theatre_id;
-  const [formData, setFormData] = useState({
-    show_name: '',
-    movie: null,
-    screen: '',
-    theatre: theatreId || '',
-    date: null,
-    start_time: { hour: 0, minute: 0, second: 0, millisecond: 0 },
-    end_time: { hour: 0, minute: 0, second: 0, millisecond: 0 },
-  });
-  const axiosInstance = createAxiosInstance('theatre');
-  const navigate = useNavigate()
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [shows, setShows] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [movieList, setMovieList] = useState([]);
+    const [screens, setScreens] = useState([]);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [selectedShow, setSelectedShow] = useState(null);
+    const [editModal, setEditModal] = useState(false);
+    const theatreData = JSON.parse(localStorage.getItem("theatre"));
+    const theatreId = theatreData.theatre_id;
+    const [formData, setFormData] = useState({
+      show_name: "",
+      movie: null,
+      screen: "",
+      theatre: theatreId || "",
+      date: null,
+      start_time: { hour: 0, minute: 0, second: 0, millisecond: 0 },
+      end_time: { hour: 0, minute: 0, second: 0, millisecond: 0 },
+    });
+    const axiosInstance = createAxiosInstance("theatre");
+    const navigate = useNavigate();
   
   const handleInputChange = (field, value) => {
     setFormData((prevFormData) => ({
@@ -93,6 +94,66 @@ function TheatreShowCards() {
         ...prevData,
         end_time: endTime,
       }));
+    }
+  };
+
+   const formatDateForInput = (dateString) => {
+     const date = new Date(dateString);
+     return date.toISOString().split("T")[0]; 
+   }
+
+  const handleEdit = (show) => {
+    setSelectedShow(show);
+    setFormData({
+      show_name: show.show_name,
+      movie: { value: show.movie.id, label: show.movie.title },
+      screen: { value: show.screen.id, label: show.screen.name },
+      theatre: show.theatre,
+      date: formatDateForInput(show.date),
+      start_time: parseTime(show.start_time),
+      end_time: parseTime(show.end_time),
+    });
+    setEditModal(true);
+  };
+
+   
+
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return {
+      hour: parseInt(hours, 10),
+      minute: parseInt(minutes, 10),
+      second: 0,
+      millisecond: 0,
+    };
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const simplifiedFormData = {
+        show_name: formData.show_name,
+        movie: formData.movie.value,
+        screen: formData.screen.value,
+        date: formData.date,
+        theatre: formData.theatre,
+        start_time: formatTime12Hour(formData.start_time),
+        end_time: formatTime12HourInput(formData.end_time),
+      };
+
+      const response = await axiosInstance.put(
+        `theatre/show/${selectedShow.id}/update/`,
+        simplifiedFormData
+      );
+      if (response.status === 200) {
+        toast.success("Show updated successfully");
+        setEditModal(false);
+        fetchShows();
+      } else {
+        toast.error("Failed to update show. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to update show. Please try again.");
     }
   };
 
@@ -227,7 +288,7 @@ function TheatreShowCards() {
         </Button>
         {loading ? (
           <div className="h-screen flex justify-center items-center">
-            <Spinner size="lg" color="secondary" label='Loading...' />
+            <Spinner size="lg" color="secondary" label="Loading..." />
           </div>
         ) : (
           <div className="gap-2 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1">
@@ -270,6 +331,16 @@ function TheatreShowCards() {
                           }}
                         >
                           <i className="fa-solid fa-trash"></i>
+                        </Button>
+                        <Button
+                          size="sm"
+                          radius="full"
+                          color="warning"
+                          variant="shadow"
+                          className="mt-2"
+                          onPress={() => handleEdit(show)}
+                        >
+                          <i className="fa-solid fa-pen"></i>
                         </Button>
                         <Button
                           size="sm"
@@ -410,6 +481,95 @@ function TheatreShowCards() {
                   }}
                 >
                   Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={editModal}
+        onOpenChange={setEditModal}
+        placement="top-center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Edit Show
+              </ModalHeader>
+              <ModalBody>
+                <Input
+                  autoFocus
+                  labelPlacement="outside"
+                  label="Show name"
+                  placeholder="Enter show name"
+                  variant="bordered"
+                  value={formData.show_name}
+                  onChange={(e) =>
+                    handleInputChange("show_name", e.target.value)
+                  }
+                  required
+                />
+
+                <label className="block text-white text-sm">Movie</label>
+                <Select
+                  options={movieList}
+                  onChange={handleMovieSelect}
+                  placeholder="Select a movie"
+                  isSearchable
+                  styles={customStyles}
+                  value={formData.movie}
+                />
+
+                <label className="block text-white text-sm">Screen</label>
+                <Select
+                  options={screens}
+                  onChange={handleScreenSelect}
+                  placeholder="Select a Screen"
+                  isSearchable
+                  styles={customStyles}
+                  value={formData.screen}
+                />
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="release_date"
+                    className="block text-white text-sm"
+                  >
+                    Show Date
+                  </label>
+                  <input
+                    type="date"
+                    id="release_date"
+                    onChange={(e) => handleInputChange("date", e.target.value)}
+                    name="date"
+                    value={formData.date}
+                    className="w-full text-white text-sm rounded-md px-3 py-2"
+                  />
+                </div>
+
+                <TimeInput
+                  label="Start Time"
+                  labelPlacement="outside"
+                  onChange={(value) => handleInputChange("start_time", value)}
+                  value={formData.start_time}
+                />
+
+                <label className="block text-white text-sm">End Time</label>
+                <Input
+                  value={formatTime12HourInput(formData.end_time) || ""}
+                  disabled
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="flat" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="primary" onPress={handleSaveEdit}>
+                  Save Edit
                 </Button>
               </ModalFooter>
             </>

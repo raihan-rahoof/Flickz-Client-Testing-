@@ -22,10 +22,16 @@ import { Link } from 'react-router-dom';
 
 function TheatreScreenAddList() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure();
   const [isloading,setLoading] = useState(false)
   const [screens, setScreens] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedScreen, setSelectedScreen] = useState(null);
+  const [screenToDelete, setScreenToDelete] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     quality: '',
@@ -38,6 +44,28 @@ function TheatreScreenAddList() {
   const [initialFormData, setInitialFormData] = useState(null);
   const [crop, setCrop] = useState({ aspect: 16 / 9 });
   const axiosInstance = createAxiosInstance('theatre');
+
+  const handleDeleteClick = (screen) => {
+    setScreenToDelete(screen);
+    onDeleteOpen();
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!screenToDelete) return;
+
+    try {
+      setLoading(true);
+      await axiosInstance.delete(`/screen/delete-screen/${screenToDelete.id}/`);
+      toast.success("Screen deleted successfully");
+      setLoading(false);
+      onDeleteOpenChange(false);
+      fetchScreens();
+    } catch (error) {
+      setLoading(false);
+      toast.error("Failed to delete screen. Please try again.");
+      console.error(error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value, files, type } = e.target;
@@ -76,6 +104,11 @@ function TheatreScreenAddList() {
     if (!name || !quality || !sound || !rows || !cols || !sections.length) {
       toast.error('Please fill all the fields');
       return;
+    }
+
+    if(rows <= 0 || cols <= 0){
+      toast.error('Please provide a positive value for rows and columns')
+      return
     }
 
     const totalSectionRows = sections.reduce((total, section) => total + parseInt(section.rows, 10), 0);
@@ -239,17 +272,27 @@ function TheatreScreenAddList() {
                       </p>
                     ))}
                   </div>
-                  <Button
-                    size="sm"
-                    className="mt-2 border bg-transparent border-white hover:bg-indigo-500 hover:border-none"
-                  >
-                    <Link
-                      to={`/theatre/screens/edit-layout/${screen.id}`}
-                      variant="faded"
+                  <div className="">
+                    <Button
+                      size="sm"
+                      className="mt-2 border bg-transparent border-white hover:bg-indigo-500 hover:border-none"
                     >
-                      Edit layout
-                    </Link>
-                  </Button>
+                      <Link
+                        to={`/theatre/screens/edit-layout/${screen.id}`}
+                        variant="faded"
+                      >
+                        Edit layout
+                      </Link>
+                    </Button>
+                    <Button
+                      size="sm"
+                      color="danger"
+                      className="ml-2"
+                      onPress={() => handleDeleteClick(screen)}
+                    >
+                      <i className="fa-solid fa-trash"></i> Delete
+                    </Button>
+                  </div>
                 </CardFooter>
               </Card>
             ))}
@@ -431,6 +474,44 @@ function TheatreScreenAddList() {
                     Save
                   </Button>
                 )}
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        size="sm"
+        isOpen={isDeleteOpen}
+        onOpenChange={onDeleteOpenChange}
+        placement="center"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-red-500">
+                Delete Screen Confirmation
+              </ModalHeader>
+              <ModalBody>
+                <p>Are you sure you want to delete this screen?</p>
+                <p className="text-red-500 font-semibold">
+                  Warning: If you delete this screen, all associated data
+                  including shows and booking history will be permanently
+                  deleted.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="default" variant="light" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  color="danger"
+                  onPress={handleDeleteConfirm}
+                  isLoading={isloading}
+                >
+                  Delete
+                </Button>
               </ModalFooter>
             </>
           )}

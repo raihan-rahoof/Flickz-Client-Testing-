@@ -55,7 +55,42 @@ axiosInstance.interceptors.request.use(async req => {
         
     }
     return req
-})
+});
+     axiosInstance.interceptors.response.use(
+       (response) => response,
+       async (error) => {
+         if (
+           error.response &&
+           error.response.status === 403 &&
+           error.response.data.detail ===
+             "Your account has been blocked or is not verified."
+         ) {
+           await logoutAndRedirect();
+         }
+         return Promise.reject(error);
+       }
+     );
+
+     const logoutAndRedirect = async () => {
+       try {
+         await axios.post(`${baseUrl}/auth/logout/`, {
+           refresh: refresh_token,
+         });
+       } catch (error) {
+         console.error("Error during logout:", error);
+       }
+       localStorage.removeItem("access");
+       localStorage.removeItem("refresh");
+       localStorage.removeItem("user");
+       localStorage.removeItem("admin_access");
+       localStorage.removeItem("admin_refresh");
+       localStorage.removeItem("theatre_access");
+       localStorage.removeItem("theatre_refresh");
+
+       
+       window.location.href = "/login"; 
+     };
+
     return axiosInstance
 }
 
