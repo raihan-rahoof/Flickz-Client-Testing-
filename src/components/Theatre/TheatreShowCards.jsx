@@ -389,7 +389,7 @@ function TheatreShowCards() {
                   onChange={(e) =>
                     handleInputChange("show_name", e.target.value)
                   }
-                  required
+                  isRequired
                 />
 
                 <label className="block text-white text-sm">Movie</label>
@@ -399,6 +399,7 @@ function TheatreShowCards() {
                   placeholder="Select a movie"
                   isSearchable
                   styles={customStyles}
+                  isRequired
                 />
 
                 <label className="block text-white text-sm">Screen</label>
@@ -408,6 +409,7 @@ function TheatreShowCards() {
                   placeholder="Select a Screen"
                   isSearchable
                   styles={customStyles}
+                  isRequired
                 />
 
                 <div className="mb-4">
@@ -422,18 +424,21 @@ function TheatreShowCards() {
                     id="release_date"
                     onChange={(e) => handleInputChange("date", e.target.value)}
                     name="date"
+                    isRequired
                     className="w-full text-white text-sm rounded-md px-3 py-2"
                   />
                 </div>
 
                 <TimeInput
                   label="Start Time"
+                  isRequired
                   labelPlacement="outside"
                   onChange={(value) => handleInputChange("start_time", value)}
                 />
 
                 <label className="block text-white text-sm">End Time</label>
                 <Input
+                  isRequired
                   value={formatTime12HourInput(formData.end_time) || ""}
                   disabled
                 />
