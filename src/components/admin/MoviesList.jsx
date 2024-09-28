@@ -2,7 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import createAxiosInstance from '../../utlis/axiosinstance';
 import toast from 'react-hot-toast';
-import { Modal, Image, Input, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Textarea, Spinner } from "@nextui-org/react";
+import {
+  Modal,
+  Image,
+  Input,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Textarea,
+  Spinner,
+  Pagination,
+} from "@nextui-org/react";
 import Swal from 'sweetalert2';
 import YouTube from 'react-youtube';
 
@@ -161,7 +174,6 @@ function MoviesList() {
                 <Spinner size="lg" label="Please Wait ..." />
               </div>
             ) : (
-                
               <table className="w-full border-collapse border border-gray-200">
                 <thead>
                   <tr>
@@ -235,8 +247,10 @@ function MoviesList() {
                   ))}
                 </tbody>
               </table>
-               
             )}
+          </div>
+          <div className="flex justify-center items-center">
+            <Pagination showControls total={10} initialPage={1} />
           </div>
         </div>
         {selectedMovie && (

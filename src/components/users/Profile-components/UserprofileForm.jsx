@@ -22,6 +22,8 @@ import {
   signInWithPhoneNumber,
 } from "firebase/auth";
 import { auth } from "../../../../firebase.config";
+import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import "@uploadcare/react-uploader/core.css";
 
 function UserprofileForm({ userProfile, setProfile }) {
   const axiosInstance = createAxiosInstance("user");
@@ -31,7 +33,7 @@ function UserprofileForm({ userProfile, setProfile }) {
       last_name: "",
       phone: "",
     },
-    user_image: null,
+    user_image: "",
     birth_date: "",
     gender: "",
     address: "",
@@ -40,7 +42,7 @@ function UserprofileForm({ userProfile, setProfile }) {
     district: "",
     state: "",
   });
-  const [file, setFile] = useState(null);
+ 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     isOpen: isOtpOpen,
@@ -72,14 +74,8 @@ function UserprofileForm({ userProfile, setProfile }) {
   };
 
   const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "user_image" && files[0]) {
-      setFile(files[0]);
-      setDetails((prevDetails) => ({
-        ...prevDetails,
-        user_image: files[0],
-      }));
-    } else if (name in details.user) {
+    const { name, value } = e.target;
+    if (name in details.user) {
       setDetails((prevDetails) => ({
         ...prevDetails,
         user: {
@@ -105,9 +101,12 @@ function UserprofileForm({ userProfile, setProfile }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("user[first_name]", details.user.first_name);
-    formData.append("user[last_name]", details.user.last_name);
-    formData.append("user[phone]", details.user.phone);
+    const userData = {
+      first_name: details.user.first_name,
+      last_name: details.user.last_name,
+      phone: details.user.phone,
+    };
+    formData.append("user", JSON.stringify(userData));
     formData.append("birth_date", details.birth_date);
     formData.append("gender", details.gender);
     formData.append("address", details.address);
@@ -115,8 +114,25 @@ function UserprofileForm({ userProfile, setProfile }) {
     formData.append("city", details.city);
     formData.append("district", details.district);
     formData.append("state", details.state);
-    if (file) {
-      formData.append("user_image", file);
+    if (details.user_image) {
+      formData.append("user_image", details.user_image);
+    }
+
+    try {
+      const res = await axios.get(
+        `https://api.postalpincode.in/pincode/${details.pincode}`
+      );
+      const response = res.data;
+
+      console.log("res", res.data[0].Status);
+      console.log("response", response);
+
+      if (response[0].Status === "Error") {
+        toast.error("Provide a Proper Pincode");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
     }
 
     try {
@@ -126,6 +142,7 @@ function UserprofileForm({ userProfile, setProfile }) {
         },
       });
       toast.success("Profile Updated Successfully");
+      fetchUserProfile()
     } catch (error) {
       toast.error("Failed to Update. Try again or Login again");
     }
@@ -182,6 +199,17 @@ function UserprofileForm({ userProfile, setProfile }) {
     } catch (error) {
       console.error(error);
       alert("Error during phone authentication");
+    }
+  };
+
+  const handleProfileChange = (files) => {
+    const successFile = files.allEntries.find((f) => f.status === "success");
+    if (successFile) {
+      const cdnUrl = successFile.cdnUrl;
+      setDetails((prevState) => ({
+        ...prevState,
+        user_image: cdnUrl,
+      }));
     }
   };
 
@@ -286,31 +314,40 @@ function UserprofileForm({ userProfile, setProfile }) {
                         label="Phone"
                         labelPlacement="outside"
                         name="phone"
-                        endContent={
-                          <div>
-                            {details.is_mobile_verified ? (
-                              <i
-                                className="fa-solid fa-circle-check"
-                                style={{ color: "#29eb0f" }}
-                              ></i>
-                            ) : (
-                              <Button
-                                size="sm"
-                                color="danger"
-                                onPress={onOtpOpen}
-                                onClick={() => verifyOtp(details.user.phone)}
-                              >
-                                Verify
-                              </Button>
-                            )}
-                          </div>
-                        }
+                        //  endContent={
+                        //    <div>
+                        //      {details.is_mobile_verified ? (
+                        //        <i
+                        //          className="fa-solid fa-circle-check"
+                        //          style={{ color: "#29eb0f" }}
+                        //        ></i>
+                        //      ) : (
+                        //        <Button
+                        //         size="sm"
+                        //        color="danger"
+                        //      onPress={onOtpOpen}
+                        //        onClick={() => verifyOtp(details.user.phone)}
+                        //      >
+                        //         Verify
+                        //      </Button>
+                        //      )}
+                        //   </div>
+                        // }
                       />
                     </div>
                     <div id="recaptcha"></div>
                   </div>
 
-                  {Object.values(details).some((value) => !value) && (
+                  {(!details.user.first_name ||
+                    !details.user.last_name ||
+                    !details.user.phone ||
+                    !details.birth_date ||
+                    !details.gender ||
+                    !details.address ||
+                    !details.pincode ||
+                    !details.city ||
+                    !details.district ||
+                    !details.state) && (
                     <div className="flex justify-center">
                       <h4 className="font-bold text-red-500">
                         **Complete your profile**
@@ -576,15 +613,15 @@ function UserprofileForm({ userProfile, setProfile }) {
                     value={details.state || ""}
                     onChange={handleInputChange}
                   />
-
-                  <Input
-                    autoFocus
-                    type="file"
-                    label="Image"
-                    labelPlacement="outside"
-                    placeholder="Upload an image"
-                    name="user_image"
-                    onChange={handleInputChange}
+                  <p>profile picture</p>
+                  <FileUploaderRegular
+                    onChange={handleProfileChange}
+                    pubkey="84b299193c8297b74db7"
+                    maxLocalFileSizeBytes={5000000}
+                    multiple={false}
+                    imgOnly={true}
+                    sourceList="local"
+                    classNameUploader="my-config uc-dark"
                   />
                 </ModalBody>
                 <ModalFooter>

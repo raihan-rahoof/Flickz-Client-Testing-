@@ -152,9 +152,9 @@ function Navbar() {
                 <DropdownItem key="analytics">
                   <Link to="/tickets">Tickets</Link>
                 </DropdownItem>
-                <DropdownItem key="help_and_feedback">
+                {/* <DropdownItem key="help_and_feedback">
                   <Link to="/theatre">Watch History</Link>
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem
                   key="logout"
                   color="danger"
