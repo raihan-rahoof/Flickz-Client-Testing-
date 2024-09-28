@@ -63,7 +63,7 @@ axiosInstance.interceptors.request.use(async req => {
            error.response &&
            error.response.status === 403 &&
            error.response.data.detail ===
-             "Your account has been blocked or is not verified."
+             "User is in active."
          ) {
            await logoutAndRedirect();
          }

@@ -578,7 +578,7 @@ function TheatreShowCards() {
                 <label className="block text-white text-sm">End Time</label>
                 <Input
                   value={formatTime12HourInput(formData.end_time) || ""}
-                  disabled
+                  
                 />
               </ModalBody>
               <ModalFooter>
