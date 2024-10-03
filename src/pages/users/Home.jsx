@@ -8,39 +8,63 @@ import createAxiosInstance from "../../utlis/axiosinstance";
 import { Spinner } from "@nextui-org/react";
 
 function Home() {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-  const [backgroundImage, setBackgroundImage] = useState([]);
-  const axiosInstance = createAxiosInstance("user");
 
-  const fetchMovies = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get("/home/movies");
-      setLoading(false);
-      setMovies(res.data);
-      console.log(res.data);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
+  //------useStates of Home------------
+      const [movies, setMovies] = useState([]);
+      const [isLoading, setLoading] = useState(false);
+      const [page,setPage] = useState(1)
+      const [hasMore,setHasMore] = useState(true)
+ 
+  //-----------axiosInstance for User---------------
+      const axiosInstance = createAxiosInstance("user");
 
-  useEffect(() => {
-    fetchMovies();
-  }, []);
 
-  // Extract genres and group movies by genre
-  const moviesByGenre = movies.reduce((acc, movie) => {
-    if (!acc[movie.genre]) {
-      acc[movie.genre] = []; // Initialize the genre array if it doesn't exist
-    }
-    acc[movie.genre].push(movie); // Add the movie to the corresponding genre
-    return acc;
-  }, {});
+  //------------Functions ---------------------------
 
-  const genres = Object.keys(moviesByGenre); // Get the unique genres
+      //fetch movies for display
+        const fetchMovies = async () => {
+          setLoading(true);
+          try {
+            const res = await axiosInstance.get(`/home/movies?page=${page}`);
+            setMovies((prevMovies)=> [...prevMovies,res.data.results]);
+            setHasMore(res.data.next !== null)
+            setLoading(false);
+            
+            console.log(res.data);
+          } catch (error) {
+            setLoading(false);
+            console.log(error);
+          }
+        };
+
+        useEffect(() => {
+          fetchMovies(page);
+        }, [page]);
+
+      //scroll pagination handling
+        const handleScroll = ()=>{
+          if(window.innerHeight + window.scrollY >= document.body.offsetHeight && hasMore && !isLoading)
+            setPage((prevPage)=> prevPage+1)
+        }
+
+        useEffect(() => {
+          window.addEventListener('scroll',handleScroll)
+          return ()=>{
+            window.removeEventListener('scroll',handleScroll)
+          }
+        }, [hasMore,isLoading])
+      
+
+      //filtering movies based on genres
+        const moviesByGenre = movies.reduce((acc, movie) => {
+          if (!acc[movie.genre]) {
+            acc[movie.genre] = []; 
+          }
+          acc[movie.genre].push(movie); 
+          return acc;
+        }, {});
+
+        const genres = Object.keys(moviesByGenre); 
 
   return (
     <>
@@ -59,7 +83,7 @@ function Home() {
             <Navbar />
             <div className="home-overlay"></div>
           </div>
-          {/* Render RowPost for each genre */}
+          
           {genres.map((genre) => (
             <RowPost
               key={genre}

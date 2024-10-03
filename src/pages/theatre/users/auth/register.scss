@@ -1,0 +1,31 @@
+.register-page{
+    position: relative; /* Set position to relative */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    z-index: 1;
+  }
+  
+  .background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/loginbackground.jpeg');
+    background-size: cover;
+    filter: blur(3px);
+    z-index: -1; /* Set z-index to ensure it's behind the form */
+  }
+
+  .register-form-container{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+ 
+
+  
