@@ -86,10 +86,11 @@ function AddMovieForm() {
       return
     }
 
-    if(!/^[A-za-z\s]+$/.test(formData.genre)){
-      toast.error('Please Provide Proper Genre')
-      return
+    if (!/^[A-Za-z\s]+(,\s*[A-Za-z\s]+)*$/.test(formData.genre)) {
+      toast.error('Please Provide Proper Genre');
+      return;
     }
+    
     
     const wordCount = formData.description.split(/\s+/).filter(word=>word.length > 0).length
     if(wordCount < 50){
