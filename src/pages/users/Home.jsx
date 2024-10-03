@@ -26,7 +26,7 @@ function Home() {
           setLoading(true);
           try {
             const res = await axiosInstance.get(`/home/movies?page=${page}`);
-            setMovies((prevMovies)=> [...prevMovies,res.data.results]);
+            setMovies((prevMovies)=> [...prevMovies,...res.data.results]);
             setHasMore(res.data.next !== null)
             setLoading(false);
             
@@ -57,14 +57,17 @@ function Home() {
 
       //filtering movies based on genres
         const moviesByGenre = movies.reduce((acc, movie) => {
-          if (!acc[movie.genre]) {
-            acc[movie.genre] = []; 
-          }
-          acc[movie.genre].push(movie); 
+          const genres = movie.genre.split(',').map(genre => genre.trim());
+          genres.forEach((genre) => {
+            if (!acc[genre]) {
+              acc[genre] = [];  
+            }
+            acc[genre].push(movie);  
+          });
           return acc;
         }, {});
-
-        const genres = Object.keys(moviesByGenre); 
+        
+        const genres = Object.keys(moviesByGenre);
 
   return (
     <>
