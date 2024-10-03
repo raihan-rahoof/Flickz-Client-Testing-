@@ -166,7 +166,7 @@ function AddMovieForm() {
             maxLocalFileSizeBytes={5000000}
             multiple={false}
             imgOnly={true}
-            sourceList="local"
+            sourceList="local,url"
             classNameUploader="my-config uc-dark"
           />
         </div>
@@ -291,7 +291,7 @@ function AddMovieForm() {
             maxLocalFileSizeBytes={5000000}
             multiple={false}
             imgOnly={true}
-            sourceList="local"
+            sourceList="local,url"
             classNameUploader="my-config uc-dark"
           />
         </div>
