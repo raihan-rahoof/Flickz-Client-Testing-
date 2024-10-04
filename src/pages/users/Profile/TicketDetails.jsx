@@ -64,16 +64,10 @@ function TicketDetails() {
                     {formatTime12Hour(item.show.end_time)}
                   </p>
                   {item.ticket_expiration ? (
-                    // <p className="text-md text-red-600 ">
-                    //  Expired
-                    // </p>
-                    <Link
-                      to={`/tickets/details/${item.id}`}
-                      state={{ booking: item }}
-                      className="text-tiny text-white bg-white/20 p-2 rounded-lg"
-                    >
-                      See ticket
-                    </Link>
+                    <p className="text-md text-red-600 ">
+                     Expired
+                    </p>
+                   
                   ) : (
                     <Link
                       to={`/tickets/details/${item.id}`}

@@ -18,6 +18,7 @@ import {
 } from "@nextui-org/react";
 import Swal from 'sweetalert2';
 import YouTube from 'react-youtube';
+import { FileUploaderRegular } from '@uploadcare/react-uploader';
 
 
 function MoviesList() {
@@ -51,14 +52,23 @@ function MoviesList() {
       fetchMovies();
     }, []);
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setNewPoster(file);
+    const handlePosterChange = (files) => {
+      const successFile = files.allEntries.find((f) => f.status === "success");
+      if (successFile) {
+        const cdnUrl = successFile.cdnUrl;
+        setNewPoster(cdnUrl)
+        setPreviewImage(cdnUrl); 
+      }
     };
-
-    const handleCoverChange = (e) => {
-        const file = e.target.files[0];
-        setNewCover(file);
+  
+    
+    const handleCoverChange = (files) => {
+      const successfulFile = files.allEntries.find((f) => f.status === "success");
+      if (successfulFile) {
+        const cdnUrl = successfulFile.cdnUrl;
+        setNewCover(cdnUrl)
+        setCoverPreview(cdnUrl); 
+      }
     };
 
     const handleInputChange = (e) => {
@@ -338,16 +348,19 @@ function MoviesList() {
                         alt="Failed to Fetch"
                         src={
                           newPoster
-                            ? URL.createObjectURL(newPoster)
+                            ? newPoster
                             : selectedMovie.poster
                         }
                       />
                     </div>
-                    <input
-                      onChange={handleFileChange}
-                      className="block w-[15rem] ml-[5rem] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                      id="file_input"
-                      type="file"
+                    <FileUploaderRegular
+                      onChange={handlePosterChange}
+                      pubkey="84b299193c8297b74db7"
+                      maxLocalFileSizeBytes={5000000}
+                      multiple={false}
+                      imgOnly={true}
+                      sourceList="local,url"
+                      classNameUploader="my-config uc-dark"
                     />
                     <Input
                       autoFocus
@@ -372,16 +385,19 @@ function MoviesList() {
                         alt="Failed to Fetch"
                         src={
                           newCover
-                            ? URL.createObjectURL(newCover)
+                            ? newCover
                             : selectedMovie.cover_image
                         }
                       />
                     </div>
-                    <input
+                    <FileUploaderRegular
                       onChange={handleCoverChange}
-                      className="block w-[15rem] ml-[5rem] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                      id="file_input"
-                      type="file"
+                      pubkey="84b299193c8297b74db7"
+                      maxLocalFileSizeBytes={5000000}
+                      multiple={false}
+                      imgOnly={true}
+                      sourceList="local,url"
+                      classNameUploader="my-config uc-dark"
                     />
                   </ModalBody>
                   <ModalFooter>
