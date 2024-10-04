@@ -24,6 +24,8 @@ import { FileUploaderRegular } from '@uploadcare/react-uploader';
 function MoviesList() {
     const [movies, setMovies] = useState([]);
     const [loading,setLoading] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1);  
+    const [totalPages, setTotalPages] = useState(1);
     const axiosInstance = createAxiosInstance('admin');
     const [selectedMovie, setMovie] = useState(null);
     const [newPoster, setNewPoster] = useState(null);
@@ -36,11 +38,12 @@ function MoviesList() {
 
     
 
-    const fetchMovies = async () => {
+    const fetchMovies = async (page=1) => {
         try {
             setLoading(true)
-            const response = await axiosInstance.get('cadmin/admin/add-movies/');
-            setMovies(response.data);
+            const response = await axiosInstance.get(`cadmin/admin/add-movies/?page=${page}`);
+            setMovies(response.data.results);
+            setTotalPages(Math.ceil(response.data.count / 10));
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -49,8 +52,8 @@ function MoviesList() {
     };
 
     useEffect(() => {
-      fetchMovies();
-    }, []);
+      fetchMovies(currentPage);
+    }, [currentPage]);
 
     const handlePosterChange = (files) => {
       const successFile = files.allEntries.find((f) => f.status === "success");
@@ -260,7 +263,7 @@ function MoviesList() {
             )}
           </div>
           <div className="flex justify-center items-center">
-            <Pagination showControls total={10} initialPage={1} />
+            <Pagination showControls total={totalPages} initialPage={currentPage} onOpenChange={(page)=>setCurrentPage(page)} />
           </div>
         </div>
         {selectedMovie && (
