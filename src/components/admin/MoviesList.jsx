@@ -43,7 +43,7 @@ function MoviesList() {
             setLoading(true)
             const response = await axiosInstance.get(`cadmin/admin/add-movies/?page=${page}`);
             setMovies(response.data.results);
-            setTotalPages(Math.ceil(response.data.count / 10));
+            setTotalPages(Math.ceil(response.data.count / 5));
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -54,6 +54,10 @@ function MoviesList() {
     useEffect(() => {
       fetchMovies(currentPage);
     }, [currentPage]);
+
+    const handlePageChange = (page) => {
+      setCurrentPage(page); 
+    };
 
     const handlePosterChange = (files) => {
       const successFile = files.allEntries.find((f) => f.status === "success");
@@ -263,7 +267,12 @@ function MoviesList() {
             )}
           </div>
           <div className="flex justify-center items-center">
-            <Pagination showControls total={totalPages} initialPage={currentPage} onOpenChange={(page)=>setCurrentPage(page)} />
+          <Pagination
+              showControls
+              total={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+            />
           </div>
         </div>
         {selectedMovie && (

@@ -620,7 +620,7 @@ function UserprofileForm({ userProfile, setProfile }) {
                     maxLocalFileSizeBytes={5000000}
                     multiple={false}
                     imgOnly={true}
-                    sourceList="local"
+                    sourceList="local,url"
                     classNameUploader="my-config uc-dark"
                   />
                 </ModalBody>
