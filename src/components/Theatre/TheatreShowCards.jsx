@@ -575,10 +575,12 @@ function TheatreShowCards() {
                   value={formData.start_time}
                 />
 
-                <label className="block text-white text-sm">End Time</label>
-                <Input
-                  value={formatTime12HourInput(formData.end_time) || ""}
-                  
+                
+                <TimeInput
+                  label="End Time"
+                  labelPlacement="outside"
+                  onChange={(value) => handleInputChange("end_time", value)}
+                  value={formData.end_time}
                 />
               </ModalBody>
               <ModalFooter>

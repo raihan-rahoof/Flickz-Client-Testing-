@@ -38,11 +38,19 @@ const PaymentSuccess = () => {
   console.log(booking);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='h-screen flex justify-center items-center'>
+      <DotLottieReact
+            src="https://lottie.host/embed/b50c3c74-b969-4e64-b630-44ff4fc2a158/zQZpDrFjCx.lottie"
+            loop
+            autoplay
+          />
+    </div>;
   }
 
   if (!booking) {
-    return <div>Error loading payment details.</div>;
+    return <div className='h-screen flex justify-center items-center'>
+      <h2 className='text-lg font-bold text-red-500'>Error Loading payment Details</h2>
+    </div>
   }
 
   return (

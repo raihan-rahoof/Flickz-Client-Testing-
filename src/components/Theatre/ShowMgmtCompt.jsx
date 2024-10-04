@@ -189,7 +189,8 @@ function ShowMgmtCompt() {
                 <Image
                   shadow="sm"
                   radius="lg"
-                  width="100%"
+                  height={300}
+                  width={200}
                   className="w-full object-cover"
                   src={showDetails.movie.poster}
                 />
