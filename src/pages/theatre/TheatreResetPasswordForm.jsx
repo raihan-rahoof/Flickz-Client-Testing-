@@ -3,15 +3,17 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import createAxiosInstance from '../../utlis/axiosinstance'
+import { Button } from '@nextui-org/react'
 
-function ResetPassword() {
+
+function TheatreResetPassword() {
     const [email,setEmail] = useState('')
     const axiosInstance = createAxiosInstance('user')
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (email) {
             try {
-                const res = await axiosInstance.post("/auth/password-reset/", { 'email': email });
+                const res = await axiosInstance.post("/theatre/password-reset/", { 'email': email });
                 toast.success("A link to reset your password has been sent to your email");
             } catch (error) {
                 if (error.response && error.response.status === 400) {
@@ -44,13 +46,11 @@ function ResetPassword() {
                     className="flex px-3 py-2 md:px-4 md:py-3 border-2 border-blue-500 rounded-lg font-medium placeholder:font-normal"
                     />
 
-                    <button type="submit" className="bg-gradient-to-r from-[#427EF5] to-[#274A8F] flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 rounded-lg font-medium text-white">
-                        Confirm
-                    </button>
+                   <Button size='lg' color='secondary' type='submit'>Confirm</Button>
                 </div>
             </form>
         </div>
     )
 }
 
-export default ResetPassword
+export default TheatreResetPassword

@@ -114,7 +114,7 @@ function TheatreLogin() {
                   name="email"
                   onChange={handleChange}
                   id="email"
-                  className="border-1 peer block w-full appearance-none rounded-lg border border-gray-600 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-100 focus:border-blue-400 focus:outline-none focus:ring-0"
+                  className="border-1 peer block w-full appearance-none rounded-lg  border-gray-600 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-100 focus:border-blue-400 focus:outline-none focus:ring-0"
                   placeholder=" "
                 />
                 <label
@@ -130,7 +130,7 @@ function TheatreLogin() {
                   name="password"
                   onChange={handleChange}
                   id="password"
-                  className="border-1 peer block w-full appearance-none rounded-lg border border-gray-600 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-100 focus:border-blue-400 focus:outline-none focus:ring-0"
+                  className="border-1 peer block w-full appearance-none rounded-lg  border-gray-600 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-100 focus:border-blue-400 focus:outline-none focus:ring-0"
                   placeholder=" "
                 />
                 <label
@@ -139,6 +139,16 @@ function TheatreLogin() {
                 >
                   Enter Your Password
                 </label>
+                <a
+                    className="group text-blue-400 transition-all duration-100 ease-in-out"
+                    href="#"
+                  >
+                    <Link to='/theatre/reset-password'
+                      className="bg-left-bottom bg-gradient-to-r text-xs from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                    >
+                      Forget your password?
+                    </Link>
+            </a>
               </div>
               {isLoading ? (
                 <input

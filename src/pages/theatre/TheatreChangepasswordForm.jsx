@@ -1,11 +1,13 @@
-import "../../pages/users/auth/register.scss";
+
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import createAxiosInstance from "../../utlis/axiosinstance";
+import { Button } from "@nextui-org/react";
 
 
-function ChangepasswordForm() {
+
+function TheatreChangepasswordForm() {
   const navigate = useNavigate();
   const { uid, token } = useParams();
   const axiosInstance = createAxiosInstance("user");
@@ -36,7 +38,7 @@ function ChangepasswordForm() {
       const res = await axiosInstance.patch("theatre/set-new-password/", data);
       const response = res.data;
       if (res.status === 200) {
-        navigate("/login");
+        navigate("/theatre/login");
         toast.success(response.message);
       }
       console.log(response);
@@ -47,6 +49,7 @@ function ChangepasswordForm() {
 
   return (
     <>
+    <div className="bg-black flex justify-center items-center h-screen">
       <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md px-8 py-6 flex flex-col items-center">
         <h1 className="text-xl font-bold text-center text-gray-700 dark:text-gray-200 mb-4">
           Set New Password
@@ -86,16 +89,18 @@ function ChangepasswordForm() {
             />
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="bg-gradient-to-r from-[#427EF5] to-[#274A8F] text-white mt-4 font-medium py-2 px-4 rounded-md shadow-sm"
+            size="lg"
+           color="secondary"
           >
             Confirm
-          </button>
+          </Button>
         </form>
+      </div>
       </div>
     </>
   );
 }
 
-export default ChangepasswordForm;
+export default TheatreChangepasswordForm;

@@ -41,6 +41,9 @@ import TheatreShowMgmt from './pages/theatre/theatreManagment/TheatreShowMgmt';
 import TheatreSideSeatBooking from './pages/theatre/theatreManagment/TheatreSideSeatBooking';
 import AdminDashBoard from './pages/admin/AdminDashBoard';
 import TheatreProfile from './pages/theatre/theatreManagment/TheatreProfile';
+import TheatreChangepasswordForm from './pages/theatre/TheatreChangepasswordForm';
+import TheatreResetPassword from './pages/theatre/TheatreResetPasswordForm';
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
@@ -121,6 +124,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route
                 path="/theatre/profile"
                 element={<TheatrePrivateRoute element={TheatreProfile} />}
+              />
+              <Route path="/theatre/reset-password" element={<TheatreResetPassword />} />
+              <Route
+                path="/theatre/reset-password-confirm/:uid/:token"
+                element={<TheatreChangepasswordForm />}
               />
 
               <Route

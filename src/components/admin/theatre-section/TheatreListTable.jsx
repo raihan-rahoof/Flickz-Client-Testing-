@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import createAxiosInstance from '../../../utlis/axiosinstance';
 import toast from 'react-hot-toast';
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,Image, Button, useDisclosure} from "@nextui-org/react";
 
 function TheatreListTable() {
   const [theatres, setTheatres] = useState([]);
@@ -378,6 +378,20 @@ const handleTheatreDisapproval = async (e, theatre_id) => {
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                         value={theatre.address}
                       />
+                    </div>
+                    <div className="mb-5">
+                      <label
+                        htmlFor="details"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Liecense
+                      </label>
+                      <Image
+                        width={300}
+                        height={200}
+                        alt="NextUI hero Image with delay"
+                        src={`https://app.requestly.io/delay/5000/${theatre.license}`}
+                      />                     
                     </div>
                     <div className="mb-5">
                       <label
